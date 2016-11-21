@@ -18,5 +18,8 @@
   "homepage": "https://github.com/cidadedemocratica/pushingtogether#readme",
   "dependencies": {
     "express": "^4.14.0"
+  },
+  "devDependencies": {
+    "mocha": "^3.1.2"
   }
 }
