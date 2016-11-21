@@ -5,8 +5,9 @@
   "main": "app.js",
   "scripts": {
     "test": "mocha 'test/**/*.js'",
-    "test-controllers": "mocha 'test/controllers/*.js'",
-    "test-models": "mocha 'test/models/*.js'"
+    "test:controllers": "mocha 'test/controllers/*.js'",
+    "test:models": "mocha 'test/models/*.js'",
+    "db:migrate": "./node_modules/.bin/sequelize db:migrate"
   },
   "repository": {
     "type": "git",
