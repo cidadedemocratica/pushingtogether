@@ -4,7 +4,9 @@
   "description": "pushing together webservice",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha 'test/**/*.js'",
+    "test-controllers": "mocha 'test/controllers/*.js'",
+    "test-models": "mocha 'test/models/*.js'"
   },
   "repository": {
     "type": "git",
