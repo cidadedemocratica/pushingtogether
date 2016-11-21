@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/cidadedemocratica/pushingtogether#readme",
   "dependencies": {
+    "connect-roles": "^3.1.2",
     "express": "^4.14.0"
   }
 }
