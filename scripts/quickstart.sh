@@ -3,6 +3,7 @@
   # install postgresql
   sudo apt-get install postgresql
 
+  cp config/database.example.json config/database.json
   sed -ri "s/root/$USER/" config/database.json
   sed -ri "s/null/\"$USER\"/" config/database.json
   sudo -u postgres psql -c "CREATE USER $USER with createdb login password '$USER'" || true
