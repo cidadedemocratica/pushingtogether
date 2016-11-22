@@ -3,7 +3,7 @@
 module.exports = {
   up: function (queryInterface, Sequelize) {
     queryInterface.createTable(
-      'users',
+      'Users',
       {
         id: {
           type: Sequelize.INTEGER,
@@ -17,7 +17,10 @@ module.exports = {
           type: Sequelize.DATE
         },
         name: Sequelize.STRING,
+        username: Sequelize.STRING,
         email: Sequelize.STRING,
+        password: Sequelize.STRING,
+        facebookToken: Sequelize.TEXT,
         externalId: Sequelize.INTEGER,
 //        attr3: {
 //          type: Sequelize.BOOLEAN,
@@ -43,6 +46,6 @@ module.exports = {
   },
 
   down: function (queryInterface, Sequelize) {
-    queryInterface.dropTable('users');
+    queryInterface.dropTable('Users');
   }
 };
