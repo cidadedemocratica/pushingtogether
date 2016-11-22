@@ -4,18 +4,18 @@ module.exports = function(sequelize, DataTypes){
   var User = sequelize.define("User", {
       name: {
         type: DataTypes.STRING,
+        allowNull: false,
         validate: {
           notEmpty: true,
-          allowNull: false
         }
       },
 
       username: {
         type: DataTypes.STRING,
         unique: true,
+        allowNull: false,
         validate: {
           notEmpty: true,
-          allowNull: false
         }
       },
 
@@ -38,6 +38,8 @@ module.exports = function(sequelize, DataTypes){
       facebookToken: DataTypes.TEXT
     }
   );
+
+  User.sync();
 
   return User;
 };
