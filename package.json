@@ -25,7 +25,8 @@
     "pg": "^6.1.0",
     "pg-hstore": "^2.3.2",
     "sequelize": "^3.27.0",
-    "sequelize-cli": "^2.4.0"
+    "sequelize-cli": "^2.4.0",
+    "validator": "^6.1.0"
   },
   "devDependencies": {
     "mocha": "^3.1.2"
