@@ -5,9 +5,9 @@
 
 'use strict';
 
-//var router = require('../models/user.js')
+var User = require('../models/').User;
 
-module.exports=function() {
+module.exports = function() {
 
   var create = function(req,res){
     setImmediate(function () {
