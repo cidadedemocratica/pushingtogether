@@ -9,8 +9,8 @@ var User = require('../src/controllers/users_controller.js');
 var Event = require('../src/controllers/events_controller.js');
 
 module.exports = function(app, base) {
-  resourcesFor(app, base, 'users', User);
-  resourcesFor(app, base, 'events', Event);
+  resourcesFor(app, base, 'users', User.call());
+  resourcesFor(app, base, 'events', Event.call());
 }
 
 function resourcesFor(app, base, name, resource){
