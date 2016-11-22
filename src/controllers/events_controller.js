@@ -5,7 +5,7 @@
 
 'use strict';
 
-//var router = require('../models/event.js')
+var models = require('./application_controller');
 
 module.exports=function() {
 
