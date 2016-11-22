@@ -28,6 +28,10 @@
     "sequelize-cli": "^2.4.0"
   },
   "devDependencies": {
+    "browser-sync": "^2.18.2",
+    "gulp": "^3.9.1",
+    "gulp-jslint": "^1.0.5",
+    "jslint": "^0.10.3",
     "mocha": "^3.1.2"
   }
 }
