@@ -1,5 +1,3 @@
 # pushingtogether
-Pushing together project developed during ParticipaLAB Collective Inteligence for Democracy
+Pushing together project developed during ParticipaLAB Collective Inteligence for Democracy, this project is based on pol.is
 
-## Run the app
-node app.js
