@@ -5,7 +5,8 @@
 
 'use strict';
 
-var user = require('../src/controllers/user.js')()
+var User = require('../src/controllers/users_controller.js')
+var Event = require('../src/controllers/events_controller.js')
 
 module.exports=function(app, base) {
   
@@ -13,46 +14,46 @@ module.exports=function(app, base) {
  
   //create
   app.post(base+'/user', function (req, res) {
-    user.create(req,res)
+    User.create(req,res)
   })
   //show
   app.get(base+'/user/:id', function (req, res) {
-    user.show(req,res)
+    User.show(req,res)
   })
   //update
   app.put(base+'/user/:id', function (req, res) {
-    user.update(req,res)
+    User.update(req,res)
   })
-  //delete
+  //destroy
   app.delete(base+'/user/:id', function (req, res) {
-    user.delete(req,res)
+    User.destroy(req,res)
   })
   //show all
   app.get(base+'/users', function (req, res) {
-    user.getAll(req,res)
+    User.getAll(req,res)
   })
 
   //event
  
   //create
   app.post(base+'/event', function (req, res) {
-    event.create(req,res)
+    Event.create(req,res)
   })
   //show
   app.get(base+'/event/:id', function (req, res) {
-    event.show(req,res)
+    Event.show(req,res)
   })
   //update
   app.put(base+'/event/:id', function (req, res) {
-    event.update(req,res)
+    Event.update(req,res)
   })
-  //delete
+  //destroy
   app.delete(base+'/event/:id', function (req, res) {
-    event.delete(req,res)
+    Event.destroy(req,res)
   })
   //show all
   app.get(base+'/events', function (req, res) {
-    event.getAll(req,res)
+    Event.getAll(req,res)
   })
 
   
