@@ -20,6 +20,7 @@ module.exports = {
         description: Sequelize.TEXT,
         address: Sequelize.STRING,
         date: Sequelize.DATE,
+        ownerId: Sequelize.INTEGER,
       },
       {
         engine: 'MYISAM', // default: 'InnoDB'

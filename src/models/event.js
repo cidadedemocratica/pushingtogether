@@ -1,5 +1,7 @@
 "use strict";
 
+var User = require('./').User
+
 module.exports = function(sequelize, DataTypes){
   var Event = sequelize.define("Event", {
       title: {
@@ -26,8 +28,16 @@ module.exports = function(sequelize, DataTypes){
       },
 
       address: DataTypes.STRING
+    },
+    {
+      classMethods:{
+        associate:function(models){
+          Event.belongsTo(models.User, {as: 'owner'})
+        }
+      }
     }
   );
+
 
   Event.sync();
 
