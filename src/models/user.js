@@ -10,22 +10,7 @@ module.exports = function(sequelize, DataTypes){
         }
       },
 
-      username: {
-        type: DataTypes.STRING,
-        unique: true,
-        allowNull: false,
-        validate: {
-          notEmpty: true,
-        }
-      },
-
-      password: {
-        type: DataTypes.STRING,
-        validate: {
-          min: 8,
-          max: 255
-        }
-      },
+      password: DataTypes.STRING,
 
       email: {
         type: DataTypes.STRING,
@@ -35,7 +20,9 @@ module.exports = function(sequelize, DataTypes){
         }
       },
 
-      facebookToken: DataTypes.TEXT
+      facebookToken: DataTypes.TEXT,
+      facebookId: DataTypes.STRING,
+      externalId: DataTypes.STRING
     }
   );
 

@@ -17,9 +17,9 @@ module.exports = {
           type: Sequelize.DATE
         },
         name: Sequelize.STRING,
-        username: Sequelize.STRING,
         email: Sequelize.STRING,
         password: Sequelize.STRING,
+        facebookId: Sequelize.STRING,
         facebookToken: Sequelize.TEXT,
         externalId: Sequelize.INTEGER,
 //        attr3: {
