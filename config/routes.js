@@ -21,6 +21,7 @@ module.exports = function(app, base, passport) {
   //error
   app.get('/error', function (req, res) {
     console.log("Errou!");
+    res.send("ERROOOU!");
   });
 };
 
