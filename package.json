@@ -7,6 +7,7 @@
     "test": "mocha 'test/**/*.js'",
     "test:controllers": "mocha 'test/controllers/*.js'",
     "test:models": "mocha 'test/models/*.js'",
+    "coverage": "istanbul cover _mocha test/**/*.js -- -R spec",
     "db:migrate": "./node_modules/.bin/sequelize db:migrate",
     "db:migrate:undo": "./node_modules/.bin/sequelize db:migrate:undo",
     "start": "./config/env/dev.env"
@@ -27,6 +28,7 @@
     "cookie-parser": "^1.4.3",
     "express": "^4.14.0",
     "express-session": "^1.14.2",
+    "istanbul": "^0.4.5",
     "morgan": "^1.7.0",
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.1",
