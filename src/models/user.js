@@ -23,6 +23,13 @@ module.exports = function(sequelize, DataTypes){
       facebookToken: DataTypes.TEXT,
       facebookId: DataTypes.STRING,
       externalId: DataTypes.STRING
+    },
+    {
+      classMethods:{
+        associate:function(models){
+          User.belongsToMany(models.Event, {through: 'Invites', foreignKey: 'eventId'})
+        }
+      }
     }
   );
 
