@@ -27,7 +27,6 @@
     "body-parser": "^1.15.2",
     "connect-roles": "^3.1.2",
     "cookie-parser": "^1.4.3",
-    "expect": "^1.20.2",
     "express": "^4.14.0",
     "express-session": "^1.14.2",
     "morgan": "^1.7.0",
@@ -47,6 +46,7 @@
     "gulp-jslint": "^1.0.5",
     "jslint": "^0.10.3",
     "mocha": "^3.1.2",
-    "nodemon": "^1.11.0"
+    "node-mocks-http": "^1.5.4",
+    "expect": "^1.20.2"
   }
 }

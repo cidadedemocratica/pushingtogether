@@ -94,7 +94,7 @@ module.exports = function() {
     setImmediate(function () {
       models.User.all()
       .then(function (users) {
-        res.status(200).send(users);
+        res.status(200).send({users: users});
       })
 
       .error(function(err){
