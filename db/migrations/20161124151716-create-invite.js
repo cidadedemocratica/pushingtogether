@@ -27,13 +27,16 @@ module.exports = {
           }
         },
 
-        userId: {
+        targetId: {
           type: Sequelize.INTEGER,
           references: {
-            model: "Users",
+            model: "Targets",
             key: "id"
           }
-        }
+        },
+
+        status: Sequelize.STRING,
+        isNotificationEnabled: Sequelize.BOOLEAN
 
       },
       {
