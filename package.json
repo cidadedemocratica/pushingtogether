@@ -4,7 +4,7 @@
   "description": "pushing together webservice",
   "main": "app.js",
   "scripts": {
-    "test": "mocha 'test/**/*.js'",
+    "test": "istanbul cover _mocha test/**/*.js",
     "test:controllers": "mocha 'test/controllers/*.js'",
     "test:models": "mocha 'test/models/*.js'",
     "db:migrate": "./node_modules/.bin/sequelize db:migrate",
