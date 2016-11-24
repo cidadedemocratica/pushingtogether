@@ -4,9 +4,10 @@
   "description": "pushing together webservice",
   "main": "app.js",
   "scripts": {
-    "test": "mocha 'test/**/*.js'",
+    "test": "istanbul cover _mocha test/**/*.js",
     "test:controllers": "mocha 'test/controllers/*.js'",
     "test:models": "mocha 'test/models/*.js'",
+    "coverage": "istanbul cover _mocha test/**/*.js -- -R spec",
     "db:migrate": "./node_modules/.bin/sequelize db:migrate",
     "db:migrate:undo": "./node_modules/.bin/sequelize db:migrate:undo",
     "start": "./config/env/dev.env"
