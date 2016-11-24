@@ -27,7 +27,8 @@ module.exports = {
           }
         },
 
-        expiresAt: Sequelize.DATE
+        expiresAt: Sequelize.DATE,
+        type: Sequelize.STRING
       },
       {
         engine: 'MYISAM', // default: 'InnoDB'

@@ -27,10 +27,10 @@ module.exports = {
           }
         },
 
-        targetId: {
+        userId: {
           type: Sequelize.INTEGER,
           references: {
-            model: "Targets",
+            model: "Users",
             key: "id"
           }
         },

@@ -27,7 +27,14 @@ module.exports = function(sequelize, DataTypes){
     {
       classMethods:{
         associate:function(models){
-          User.belongsToMany(models.Event, {through: 'Invites', foreignKey: 'eventId'})
+          User.hasMany(models.Pushability, { foreignKey: 'pusherId' });
+          User.hasMany(models.Event, { foreignKey: 'ownerId' });
+          User.belongsToMany(models.Pushability, {
+            through: "UsersPushabilities",
+            foreignKey: 'userId',
+            as: "targets"
+          });
+          User.belongsToMany(models.Event, {through: "Invite"});
         }
       }
     }
