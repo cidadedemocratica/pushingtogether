@@ -28,13 +28,21 @@ module.exports = function(sequelize, DataTypes){
       classMethods:{
         associate:function(models){
           User.hasMany(models.Pushability, { foreignKey: 'pusherId' });
-          User.hasMany(models.Event, { foreignKey: 'ownerId' });
+          User.hasMany(models.Event, {
+            foreignKey: 'ownerId',
+            onDelete: 'cascade',
+            hooks: true
+          });
           User.belongsToMany(models.Pushability, {
-            through: "UsersPushabilities",
+            through: "UserPushability",
             foreignKey: 'userId',
             as: "targets"
           });
-          User.belongsToMany(models.Event, {through: "Invite"});
+          User.belongsToMany(models.Event, {
+            through: models.Invite,
+            as: 'invitedEvents',
+            foreignKey: 'userId'
+          });
         }
       }
     }

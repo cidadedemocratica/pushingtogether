@@ -2,14 +2,6 @@
 
 module.exports = function(sequelize, DataTypes){
   var Invite = sequelize.define("Invite", {
-      expiresAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        validate: {
-          notEmpty: true
-        }
-      },
-
       status: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -23,8 +15,8 @@ module.exports = function(sequelize, DataTypes){
     {
       classMethods:{
         associate:function(models){
-          Invite.belongsTo(models.Event);
-          Invite.belongsTo(models.User);
+          Invite.belongsTo(models.Event, { foreignKey: 'eventId' });
+          Invite.belongsTo(models.User, { foreignKey: 'userId' });
         },
         status: {
           CONFIRMED: "confirmed",
