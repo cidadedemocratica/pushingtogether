@@ -7,57 +7,71 @@
 
 var User = require('../src/controllers/users_controller.js');
 var Event = require('../src/controllers/events_controller.js');
+var Middleware = require('./middlewares');
 
-module.exports = function(app, base, passport) {
-  facebookAuth(app, passport);
-  resourcesFor(app, base, 'users', User.call());
-  resourcesFor(app, base, 'events', Event.call());
+module.exports = function(router, base, passport) {
+
+  facebookAuth(router, passport);
+  resourcesFor(router, base, 'users', User.call());
+  resourcesFor(router, base, 'events', Event.call());
 
   //test
-  app.get('/', function (req, res) {
+  router.get('/', function (req, res) {
     res.send(req.session.passport);
   });
 
   //error
-  app.get('/error', function (req, res) {
+  router.get('/error', function (req, res) {
     console.log("Errou!");
     res.send("ERROOOU!");
   });
 };
 
-function resourcesFor(app, base, name, resource){
+function resourcesFor(router, base, name, resource){
   //create
-  app.post(base + '/' + name , function (req, res) {
+  router.post(base + '/' + name , function (req, res) {
     resource.create(req,res);
   });
 
   //show
-  app.get(base + '/' + name + '/:id', function (req, res) {
-    resource.show(req,res);
+  router.get(base + '/' + name + '/:id', function (req, res) {
+    Middleware.Auth(req)
+    .then(function (current_user){
+      resource.show(req,res);
+    });
   });
 
   //update
-  app.put(base + '/' + name + '/:id', function (req, res) {
-    resource.update(req,res);
+  router.put(base + '/' + name + '/:id', function (req, res) {
+    Middleware.Auth(req)
+    .then(function (current_user){
+      resource.update(req,res);
+    });
   });
 
   //destroy
-  app.delete(base + '/' + name + '/:id', function (req, res) {
-    resource.destroy(req,res);
+  router.delete(base + '/' + name + '/:id', function (req, res) {
+    Middleware.Auth(req)
+    .then(function (current_user){
+      resource.destroy(req, res, current_user);
+    });
   });
 
   //show all
-  app.get(base + '/' + name, function (req, res) {
-    resource.getAll(req,res);
+  router.get(base + '/' + name, function (req, res, next) {
+    Middleware.Auth(req)
+    .then(function (current_user){
+      resource.getAll(req,res);
+    });
   });
 };
 
-function facebookAuth(app, passport){
+function facebookAuth(router, passport){
   //ask for permission
-  app.get('/auth/facebook', passport.authenticate('facebook', { scope : ['email'] }));
+  router.get('/auth/facebook', passport.authenticate('facebook', { scope : ['email'] }));
 
   //handle the callback after facebook has authenticated the user
-  app.get('/auth/facebook/callback',
+  router.get('/auth/facebook/callback',
     passport.authenticate('facebook', {
       successRedirect : '/',
       failureRedirect : '/error'
@@ -65,8 +79,9 @@ function facebookAuth(app, passport){
   );
 
   //route for logging out
-  app.get('/logout', function(req, res) {
+  router.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
   });
+
 };
