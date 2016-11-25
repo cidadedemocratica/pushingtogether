@@ -23,6 +23,28 @@ module.exports = function(sequelize, DataTypes){
       facebookToken: DataTypes.TEXT,
       facebookId: DataTypes.STRING,
       externalId: DataTypes.STRING
+    },
+    {
+      classMethods:{
+        associate:function(models){
+          User.hasMany(models.Pushability, { foreignKey: 'pusherId' });
+          User.hasMany(models.Event, {
+            foreignKey: 'ownerId',
+            onDelete: 'cascade',
+            hooks: true
+          });
+          User.belongsToMany(models.Pushability, {
+            through: "UserPushability",
+            foreignKey: 'userId',
+            as: "targets"
+          });
+          User.belongsToMany(models.Event, {
+            through: models.Invite,
+            as: 'invitedEvents',
+            foreignKey: 'userId'
+          });
+        }
+      }
     }
   );
 
