@@ -7,8 +7,10 @@
     "test": "mocha 'test/**/*.js'",
     "test:controllers": "mocha 'test/controllers/*.js'",
     "test:models": "mocha 'test/models/*.js'",
+    "db:drop:dev": "sudo -u postgres psql -c \"drop database pt_dev\"",
     "db:migrate": "./node_modules/.bin/sequelize db:migrate",
     "db:migrate:undo": "./node_modules/.bin/sequelize db:migrate:undo",
+    "setup": "./scripts/quickstart.sh",
     "start": "./config/env/dev.env"
   },
   "repository": {
@@ -47,5 +49,6 @@
     "mocha": "^3.1.2",
     "node-mocks-http": "^1.5.4",
     "should": "^11.1.1"
+    "nodemon": "^1.11.0"
   }
 }
