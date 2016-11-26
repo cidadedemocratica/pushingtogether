@@ -10,9 +10,9 @@ var ApplicationController = require('./application_controller');
 module.exports = function() {
   ApplicationController.call(this);
 
-  var create = function(req,res){
+  var create = function(req, res){
     setImmediate(function() {
-      currentUser.createEvent(req.params)
+      req.currentUser.createEvent(req.params)
       .then(function(event, done) {
         if(event){
           // TODO: insert users to the event
