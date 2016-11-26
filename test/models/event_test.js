@@ -17,8 +17,8 @@ describe('Event', function() {
         _owner = user;
         _owner.createEvent(helper.validEventAttributes)
         .then( function(event){
-            _event = event;
-            done();
+          _event = event;
+          done();
         });
       });
     });

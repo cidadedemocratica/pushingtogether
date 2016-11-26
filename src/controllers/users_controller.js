@@ -5,9 +5,10 @@
 
 'use strict';
 
-var models = require('./application_controller');
+var ApplicationController = require('./application_controller');
 
 module.exports = function() {
+  ApplicationController.call(this);
 
   var skipAuthFor = function() {
     return ["getAll"];
@@ -27,7 +28,7 @@ module.exports = function() {
   
   var show = function(req, res, currentUser) {
     setImmediate(function () {
-      models.User.findById(req.params.id)
+      User.findById(req.params.id)
       .then(function (user) {
         if(user) {
             res.status(200).send(user);
@@ -44,7 +45,7 @@ module.exports = function() {
 
   var update = function(req, res, currentUser){
     setImmediate(function () {
-      models.User.findById(req.params.id)
+      User.findById(req.params.id)
       .then(function (user) {
         if(currentUser && user && currentUser.canUpdate(user)) {
           user.updateAttributes(req.body)
@@ -74,7 +75,7 @@ module.exports = function() {
     console.log(req.params);
     console.log(req.body);
     setImmediate(function () {
-      models.User.findById(req.params.id)
+      User.findById(req.params.id)
       .then(function (user) {
         if(currentUser && user && currentUser.canDestroy(user)) {
           user.destroy()
@@ -98,7 +99,7 @@ module.exports = function() {
 
   var getAll = function(req,res){
     setImmediate(function () {
-      models.User.all()
+      User.all()
       .then(function (users) {
         res.status(200).send({users: users});
       })
