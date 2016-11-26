@@ -6,9 +6,9 @@
 'use strict';
 
 var ApplicationController = require('./application_controller');
+var Event = ApplicationController.Event
 
 module.exports = function() {
-  ApplicationController.call(this);
 
   var create = function(req, res){
     setImmediate(function() {
@@ -24,7 +24,7 @@ module.exports = function() {
       });
     });
   }
-  
+
   var show = function(req,res){
     setImmediate(function () {
       // TODO: call model show
@@ -38,7 +38,7 @@ module.exports = function() {
     });
   }
 
-  var update = function(req,res){ 
+  var update = function(req,res){
     setImmediate(function () {
       //TODO: call model update
       var jsonStr = '{"action":"update event", "id": '+req.params.id+', "date": "date", "location": "Itú, SP", "description": "Escalada do Varvito", "owner": "parra"}';
@@ -50,7 +50,7 @@ module.exports = function() {
       }
     });
   }
-  
+
   var destroy = function(req,res){
     setImmediate(function () {
       //TODO: call model delete and see if event exists
@@ -91,6 +91,6 @@ module.exports = function() {
     },
     getAll: function(req,res){
       return getAll(req,res);
-    } 
+    }
   }
 }
