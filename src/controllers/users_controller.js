@@ -5,9 +5,11 @@
 
 'use strict';
 
-var models = require('./application_controller');
+var ApplicationController = require('./application_controller');
+var User = require('../models').User
 
 module.exports = function() {
+  ApplicationController.call(this);
 
   var skipAuthFor = function() {
     return ["getAll"];
@@ -25,9 +27,9 @@ module.exports = function() {
     });
   }
   
-  var show = function(req, res, currentUser) {
+  var show = function(req, res) {
     setImmediate(function () {
-      models.User.findById(req.params.id)
+      User.findById(req.params.id)
       .then(function (user) {
         if(user) {
             res.status(200).send(user);
@@ -42,11 +44,11 @@ module.exports = function() {
     });
   }
 
-  var update = function(req, res, currentUser){
+  var update = function(req, res){
     setImmediate(function () {
-      models.User.findById(req.params.id)
+      User.findById(req.params.id)
       .then(function (user) {
-        if(currentUser && user && currentUser.canUpdate(user)) {
+        if(req.currentUser && user && req.currentUser.canUpdate(user)) {
           user.updateAttributes(req.body)
           .then(function (u) {
             res.status(200).send(user);
@@ -66,17 +68,11 @@ module.exports = function() {
     });
   }
   
-  var destroy = function(req, res, currentUser){
-    console.log("==================");
-    console.log("==================");
-    console.log("==================");
-    console.log("==================");
-    console.log(req.params);
-    console.log(req.body);
+  var destroy = function(req, res){
     setImmediate(function () {
-      models.User.findById(req.params.id)
+      User.findById(req.params.id)
       .then(function (user) {
-        if(currentUser && user && currentUser.canDestroy(user)) {
+        if(req.currentUser && user && req.currentUser.canDestroy(user)) {
           user.destroy()
           .then(function (u) {
             res.status(200).send(user);
@@ -98,7 +94,7 @@ module.exports = function() {
 
   var getAll = function(req,res){
     setImmediate(function () {
-      models.User.all()
+      User.all()
       .then(function (users) {
         res.status(200).send({users: users});
       })
@@ -110,20 +106,20 @@ module.exports = function() {
   }
 
   return {
-    create: function(req, res, currentUser){
-      return create(req, res, currentUser);
+    create: function(req, res){
+      return create(req, res);
     },
-    show: function(req, res, currentUser){
-      return show(req, res, currentUser);
+    show: function(req, res){
+      return show(req, res);
     },
-    update: function(req, res, currentUser){
-      return update(req, res, currentUser);
+    update: function(req, res){
+      return update(req, res);
     },
-    destroy: function(req, res, currentUser){
-      return destroy(req, res, currentUser);
+    destroy: function(req, res){
+      return destroy(req, res);
     },
-    getAll: function(req, res, currentUser){
-      return getAll(req, res, currentUser);
+    getAll: function(req, res){
+      return getAll(req, res);
     },
     skipAuthFor: function() {
       return skipAuthFor();

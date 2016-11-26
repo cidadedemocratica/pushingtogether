@@ -30,13 +30,16 @@ module.exports = function(router, base, passport) {
 function resourcesFor(router, base, name, resource){
   //create
   router.post(base + '/' + name , function (req, res) {
-    resource.create(req,res);
+    Middleware.Auth(req)
+    .then(function () {
+      resource.create(req,res);
+    });
   });
 
   //show
   router.get(base + '/' + name + '/:id', function (req, res) {
     Middleware.Auth(req)
-    .then(function (currentUser){
+    .then(function (){
       resource.show(req,res);
     });
   });
@@ -44,7 +47,7 @@ function resourcesFor(router, base, name, resource){
   //update
   router.put(base + '/' + name + '/:id', function (req, res) {
     Middleware.Auth(req)
-    .then(function (currentUser){
+    .then(function (){
       resource.update(req,res);
     });
   });
@@ -52,15 +55,15 @@ function resourcesFor(router, base, name, resource){
   //destroy
   router.delete(base + '/' + name + '/:id', function (req, res) {
     Middleware.Auth(req)
-    .then(function (currentUser){
-      resource.destroy(req, res, currentUser);
+    .then(function (){
+      resource.destroy(req, res);
     });
   });
 
   //show all
   router.get(base + '/' + name, function (req, res, next) {
     Middleware.Auth(req)
-    .then(function (currentUser){
+    .then(function (){
       resource.getAll(req,res);
     });
   });
