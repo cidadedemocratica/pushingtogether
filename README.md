@@ -4,15 +4,16 @@ Pushing together project developed during ParticipaLAB Collective Inteligence fo
 ## Installing
 1. Clone it
 2. Set node version 6.9.0
-3. Install postgres for your SO
-4. Run `npm install` inside the cloned folder
-5. Run `npm run setup`
-
-## If yoy need
-
+3. Run:  
+```bash
+cd pushingtogether
+npm install
+npm run setup #in case you're using OS X: npm run setup:osx
+ ```
 ## Running
-1. After installing it, just run `npm start` inside the folder, or use `node app.js`
+1. `npm start` inside the folder, or use `node app.js`
 
-## Dropping development database
-1. Run `npm run db:drop:dev`
-1. Run `npm run setup`
+## Setup
+```bash
+npm run setup #in case you're using OS X: npm run setup:osx
+npm run db:migrate
