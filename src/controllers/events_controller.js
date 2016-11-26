@@ -6,72 +6,76 @@
 'use strict';
 
 var ApplicationController = require('./application_controller');
+var Event = ApplicationController.Event
 
 module.exports = function() {
-  ApplicationController.call(this);
 
   var create = function(req, res){
     setImmediate(function() {
-      req.currentUser.createEvent(req.params)
-      .then(function(event, done) {
+      req.currentUser.createEvent(req.body)
+      .then(function(event) {
         if(event){
           // TODO: insert users to the event
           res.status(200).send({event: event});
         }else {
-          res.status(400).send('Invalid JSON string');
+          res.status(400).send('Event cannot be created');
         }
-        done();
       });
     });
   }
-  
+
   var show = function(req,res){
-    setImmediate(function () {
-      // TODO: call model show
-      var jsonStr = '{"action":"update event", "id": '+req.params.id+', "date": "date", "location": "Itú, SP", "description": "Escalada do Varvito", "owner": "parra"}';
-      try {
-        var jsonObj = JSON.parse(jsonStr);
-        res.send(jsonObj);
-      } catch (e) {
-        res.status(400).send('Invalid JSON string');
-      }
+    setImmediate(function() {
+      Event.findById(req.params.id)
+      .then(function(event) {
+        if(event){
+          res.status(200).send({event: event});
+        }else {
+          res.status(400).send('Event does not exist');
+        }
+      });
     });
   }
 
-  var update = function(req,res){ 
-    setImmediate(function () {
-      //TODO: call model update
-      var jsonStr = '{"action":"update event", "id": '+req.params.id+', "date": "date", "location": "Itú, SP", "description": "Escalada do Varvito", "owner": "parra"}';
-      try {
-        var jsonObj = JSON.parse(jsonStr);
-        res.send(jsonObj);
-      } catch (e) {
-        res.status(400).send('Invalid JSON string');
-      }
+  var update = function(req,res){
+    setImmediate(function() {
+      Event.findById(req.params.id)
+      .then(function(event) {
+        if(event){
+          event.update(req.body)
+          .then(function(event) {
+            res.status(200).send({event: event});
+          })
+        }else {
+          res.status(400).send('Event does not exist');
+        }
+      });
     });
   }
-  
+
   var destroy = function(req,res){
-    setImmediate(function () {
-      //TODO: call model delete and see if event exists
-      try {
-        res.send('Success');
-      } catch (e) {
-        res.status(400).send('Invalid JSON string');
-      }
+    setImmediate(function() {
+      Event.destroy({ where: { id: req.params.id } })
+      .then(function(rows) {
+        if(rows) {
+          res.status(200).send('Event deleted with success');
+        }
+        else {
+          res.status(400).send('Event does not exist');
+        }
+      });
     });
   }
 
   var getAll = function(req,res){
     setImmediate(function () {
-      //TODO: call model getAll
-      var jsonStr = '{"events": [{"action":"update event", "id": 2, "name": "Maurilio Atila"}, {"action":"update event", "id": 2, "name": "Henrique Parra"}]}';
-      try {
-        var jsonObj = JSON.parse(jsonStr);
-        res.send(jsonObj);
-      } catch (e) {
-        res.status(400).send('Invalid JSON string');
-      }
+      Event.all()
+      .then(function (events) {
+        res.status(200).send({events: events});
+      })
+      .error(function(err){
+        res.status(500).send('Internal server error');
+      });
     });
 
   }
@@ -91,6 +95,6 @@ module.exports = function() {
     },
     getAll: function(req,res){
       return getAll(req,res);
-    } 
+    }
   }
 }

@@ -6,10 +6,9 @@
 'use strict';
 
 var ApplicationController = require('./application_controller');
-var User = require('../models').User
+var User = ApplicationController.User
 
 module.exports = function() {
-  ApplicationController.call(this);
 
   var skipAuthFor = function() {
     return ["getAll"];
@@ -26,7 +25,7 @@ module.exports = function() {
       }
     });
   }
-  
+
   var show = function(req, res) {
     setImmediate(function () {
       User.findById(req.params.id)
@@ -67,7 +66,7 @@ module.exports = function() {
       });
     });
   }
-  
+
   var destroy = function(req, res){
     setImmediate(function () {
       User.findById(req.params.id)
