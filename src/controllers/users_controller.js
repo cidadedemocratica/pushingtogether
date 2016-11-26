@@ -9,6 +9,10 @@ var models = require('./application_controller');
 
 module.exports = function() {
 
+  var skipAuthFor = function() {
+    return ["getAll"];
+  }
+
   var create = function(req,res){
     setImmediate(function () {
       var jsonStr = '{"action":"create user", "id": "1", "name": "Maurilio Atila"}';
@@ -21,40 +25,40 @@ module.exports = function() {
     });
   }
   
-  var show = function(req,res){
+  var show = function(req, res, currentUser) {
     setImmediate(function () {
       models.User.findById(req.params.id)
       .then(function (user) {
-          if(user) {
-              res.status(200).send(user);
-          }else {
-            res.status(404).send('User not found');
-          }
-        })
+        if(user) {
+            res.status(200).send(user);
+        }else {
+          res.status(404).send('User not found');
+        }
+      })
 
-      .error(function(err){
+      .error(function(err) {
         res.status(500).send('Internal server error');
       });
     });
   }
 
-  var update = function(req,res){ 
+  var update = function(req, res, currentUser){
     setImmediate(function () {
       models.User.findById(req.params.id)
       .then(function (user) {
-          if(user) {
-            user.updateAttributes(req.body)
-            .then(function (u) {
-              res.status(200).send(user);
-            })
+        if(currentUser && user && currentUser.canUpdate(user)) {
+          user.updateAttributes(req.body)
+          .then(function (u) {
+            res.status(200).send(user);
+          })
 
-            .error(function () {
-              res.status(400).send('Error updating the user');
-            });
-          }else {
-            res.status(404).send('User not found');
-          }
-        })
+          .error(function () {
+            res.status(400).send('Error updating the user');
+          });
+        }else {
+          res.status(404).send('User not found or unauthorized');
+        }
+      })
 
       .error(function(err){
         res.status(500).send('Internal server error');
@@ -62,11 +66,17 @@ module.exports = function() {
     });
   }
   
-  var destroy = function(req,res){
+  var destroy = function(req, res, currentUser){
+    console.log("==================");
+    console.log("==================");
+    console.log("==================");
+    console.log("==================");
+    console.log(req.params);
+    console.log(req.body);
     setImmediate(function () {
       models.User.findById(req.params.id)
       .then(function (user) {
-        if(user) {
+        if(currentUser && user && currentUser.canDestroy(user)) {
           user.destroy()
           .then(function (u) {
             res.status(200).send(user);
@@ -76,7 +86,7 @@ module.exports = function() {
             res.status(400).send('Error destroying the user');
           });
         }else {
-          res.status(404).send('User not found');
+          res.status(404).send('User not found or unauthorized');
         }
       })
 
@@ -90,7 +100,7 @@ module.exports = function() {
     setImmediate(function () {
       models.User.all()
       .then(function (users) {
-        res.status(200).send(users);
+        res.status(200).send({users: users});
       })
 
       .error(function(err){
@@ -100,20 +110,23 @@ module.exports = function() {
   }
 
   return {
-    create: function(req,res){
-      return create(req,res);
+    create: function(req, res, currentUser){
+      return create(req, res, currentUser);
     },
-    show: function(req,res){
-      return show(req,res);
+    show: function(req, res, currentUser){
+      return show(req, res, currentUser);
     },
-    update: function(req,res){
-      return update(req,res);
+    update: function(req, res, currentUser){
+      return update(req, res, currentUser);
     },
-    destroy: function(req,res){
-      return destroy(req,res);
+    destroy: function(req, res, currentUser){
+      return destroy(req, res, currentUser);
     },
-    getAll: function(req,res){
-      return getAll(req,res);
-    }
+    getAll: function(req, res, currentUser){
+      return getAll(req, res, currentUser);
+    },
+    skipAuthFor: function() {
+      return skipAuthFor();
+    },
   }
 }

@@ -43,6 +43,16 @@ module.exports = function(sequelize, DataTypes){
             as: 'invitedEvents',
             foreignKey: 'userId'
           });
+        },
+        authenticate: function(token) {
+          return(
+            User.findOne({ where: {facebookToken: token} })
+          );
+        }
+      },
+      instanceMethods: {
+        canDestroy: function(user) {
+          return this.facebookToken == user.facebookToken;
         }
       }
     }
