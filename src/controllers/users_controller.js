@@ -25,7 +25,7 @@ module.exports = function() {
     });
   }
   
-  var show = function(req, res, current_user) {
+  var show = function(req, res, currentUser) {
     setImmediate(function () {
       models.User.findById(req.params.id)
       .then(function (user) {
@@ -42,11 +42,11 @@ module.exports = function() {
     });
   }
 
-  var update = function(req, res, current_user){
+  var update = function(req, res, currentUser){
     setImmediate(function () {
       models.User.findById(req.params.id)
       .then(function (user) {
-        if(current_user && user && current_user.canUpdate(user)) {
+        if(currentUser && user && currentUser.canUpdate(user)) {
           user.updateAttributes(req.body)
           .then(function (u) {
             res.status(200).send(user);
@@ -66,11 +66,17 @@ module.exports = function() {
     });
   }
   
-  var destroy = function(req, res, current_user){
+  var destroy = function(req, res, currentUser){
+    console.log("==================");
+    console.log("==================");
+    console.log("==================");
+    console.log("==================");
+    console.log(req.params);
+    console.log(req.body);
     setImmediate(function () {
       models.User.findById(req.params.id)
       .then(function (user) {
-        if(current_user && user && current_user.canDestroy(user)) {
+        if(currentUser && user && currentUser.canDestroy(user)) {
           user.destroy()
           .then(function (u) {
             res.status(200).send(user);
@@ -104,20 +110,20 @@ module.exports = function() {
   }
 
   return {
-    create: function(req, res, current_user){
-      return create(req, res, current_user);
+    create: function(req, res, currentUser){
+      return create(req, res, currentUser);
     },
-    show: function(req, res, current_user){
-      return show(req, res, current_user);
+    show: function(req, res, currentUser){
+      return show(req, res, currentUser);
     },
-    update: function(req, res, current_user){
-      return update(req, res, current_user);
+    update: function(req, res, currentUser){
+      return update(req, res, currentUser);
     },
-    destroy: function(req, res, current_user){
-      return destroy(req, res, current_user);
+    destroy: function(req, res, currentUser){
+      return destroy(req, res, currentUser);
     },
-    getAll: function(req, res, current_user){
-      return getAll(req, res, current_user);
+    getAll: function(req, res, currentUser){
+      return getAll(req, res, currentUser);
     },
     skipAuthFor: function() {
       return skipAuthFor();

@@ -36,7 +36,7 @@ function resourcesFor(router, base, name, resource){
   //show
   router.get(base + '/' + name + '/:id', function (req, res) {
     Middleware.Auth(req)
-    .then(function (current_user){
+    .then(function (currentUser){
       resource.show(req,res);
     });
   });
@@ -44,7 +44,7 @@ function resourcesFor(router, base, name, resource){
   //update
   router.put(base + '/' + name + '/:id', function (req, res) {
     Middleware.Auth(req)
-    .then(function (current_user){
+    .then(function (currentUser){
       resource.update(req,res);
     });
   });
@@ -52,15 +52,15 @@ function resourcesFor(router, base, name, resource){
   //destroy
   router.delete(base + '/' + name + '/:id', function (req, res) {
     Middleware.Auth(req)
-    .then(function (current_user){
-      resource.destroy(req, res, current_user);
+    .then(function (currentUser){
+      resource.destroy(req, res, currentUser);
     });
   });
 
   //show all
   router.get(base + '/' + name, function (req, res, next) {
     Middleware.Auth(req)
-    .then(function (current_user){
+    .then(function (currentUser){
       resource.getAll(req,res);
     });
   });
