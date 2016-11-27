@@ -1,4 +1,6 @@
 var models = require('../src/models');
+var Pushability = models.Pushability
+var User = models.User
 
 module.exports = {
   validUserAttributes: {
@@ -25,12 +27,12 @@ module.exports = {
     attributes.email = name + attributes.email;
     attributes.facebookToken = attributes.facebookToken + name;
     return (
-      models.User.create(attributes)
+      User.create(attributes)
     );
   }
 
   validPushabilitytAttributes: {
-    expiresAt: Date.now()
+    expiresAt: Date.now(),
     type: Pushability.types.EVENT
   }
 }

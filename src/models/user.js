@@ -36,7 +36,6 @@ module.exports = (sequelize, DataTypes) => {
           User.belongsToMany(models.Pushability, {
             through: "UserPushability",
             foreignKey: 'userId',
-            as: "targets"
           });
           User.belongsToMany(models.Event, {
             through: models.Invite,

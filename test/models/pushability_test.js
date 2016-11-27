@@ -5,38 +5,54 @@ var helper = require('../helper');
 var Pushbility = models.Pushability;
 var User = models.User;
 
-describe('Pushability', function() {
-  describe('Check pushability relations', function() {
+describe('Pushability', () => {
+  describe('Check pushability relations', () => {
 
-    var _pusher = null, _pushability = null;
+    describe('Using valid attributes', () => {
+      var _pusher = null, _pushability = null;
 
-    beforeEach( function(done) {
-      User.create(helper.validUserAttributes)
-      .then( function(user) {
-        _pusher = user;
-        _pusher.createPushability(helper.validPushabilitytAttributes)
-        .then( function(pushability){
-          _pushability = pushability;
-          done();
+      beforeEach( (done) => {
+        User.create(helper.validUserAttributes)
+        .then( (user) => {
+          _pusher = user;
+          _pusher.createPushability(helper.validPushabilitytAttributes)
+          .then( (pushability) => {
+            _pushability = pushability;
+            done();
+          });
         });
       });
-    });
 
-    afterEach(function(done) {
-      _pushability .destroy()
-      .then(function() {
-        _pusher.destroy()
-        .then(function() {
-          done();
+      afterEach( (done) => {
+        _pushability .destroy()
+        .then( () => {
+          _pusher.destroy()
+          .then( () => {
+            done();
+          });
         });
       });
-    });
 
-    it("should return all pushability a user has", function(done) {
-      _puser.getPushabilities()
-      .then(function(pushabilities) {
-        expect(pushabilites.length).toBe(1);
-      })
-    });
+      it("should return all pushability a user has", (done) => {
+        _puser.getPushabilities()
+        .then((pushabilities) => {
+          expect(pushabilites.length).toBe(1);
+        });
+      });
 
+      it("should add some user as a target", (done) => {
+        _pushability.getUsers()
+        .then((oldListOfUsers) => {
+          _pushability.addUser(_pusher)
+          .then( () => {
+            _pushability.getUsers()
+            .then( (listOfUsers) => {
+              expect(listOfUsers.length).toEqual(oldListOfUsers.length);
+            });
+          });
+        });
+      }); 
+
+    });
+  });
 });
