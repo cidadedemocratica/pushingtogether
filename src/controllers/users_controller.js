@@ -8,14 +8,14 @@
 var ApplicationController = require('./application_controller');
 var User = ApplicationController.User
 
-module.exports = function() {
+module.exports = () => {
 
-  var skipAuthFor = function() {
+  var skipAuthFor = () => {
     return ["getAll"];
   }
 
-  var create = function(req,res){
-    setImmediate(function () {
+  var create = (req,res) => {
+    setImmediate(() => {
       var jsonStr = '{"action":"create user", "id": "1", "name": "Maurilio Atila"}';
       try {
         var jsonObj = JSON.parse(jsonStr);
@@ -26,10 +26,10 @@ module.exports = function() {
     });
   }
 
-  var show = function(req, res) {
-    setImmediate(function () {
+  var show = (req, res) => {
+    setImmediate(() => {
       User.findById(req.params.id)
-      .then(function (user) {
+      .then((user) => {
         if(user) {
             res.status(200).send(user);
         }else {
@@ -37,23 +37,23 @@ module.exports = function() {
         }
       })
 
-      .error(function(err) {
+      .error((err) => {
         res.status(500).send('Internal server error');
       });
     });
   }
 
-  var update = function(req, res){
-    setImmediate(function () {
+  var update = (req, res) => {
+    setImmediate(() => {
       User.findById(req.params.id)
-      .then(function (user) {
+      .then((user) => {
         if(req.currentUser && user && req.currentUser.canUpdate(user)) {
           user.updateAttributes(req.body)
-          .then(function (u) {
+          .then((u) => {
             res.status(200).send(user);
           })
 
-          .error(function () {
+          .error(() => {
             res.status(400).send('Error updating the user');
           });
         }else {
@@ -61,23 +61,23 @@ module.exports = function() {
         }
       })
 
-      .error(function(err){
+      .error((err) => {
         res.status(500).send('Internal server error');
       });
     });
   }
 
-  var destroy = function(req, res){
-    setImmediate(function () {
+  var destroy = (req, res) => {
+    setImmediate(() => {
       User.findById(req.params.id)
-      .then(function (user) {
+      .then((user) => {
         if(req.currentUser && user && req.currentUser.canDestroy(user)) {
           user.destroy()
-          .then(function (u) {
+          .then((u) => {
             res.status(200).send(user);
           })
 
-          .error(function () {
+          .error(() => {
             res.status(400).send('Error destroying the user');
           });
         }else {
@@ -85,42 +85,42 @@ module.exports = function() {
         }
       })
 
-      .error(function(err){
+      .error((err) => {
         res.status(500).send('Internal server error');
       });
     });
   }
 
-  var getAll = function(req,res){
-    setImmediate(function () {
+  var getAll = (req,res) => {
+    setImmediate(() => {
       User.all()
-      .then(function (users) {
+      .then((users) => {
         res.status(200).send({users: users});
       })
 
-      .error(function(err){
+      .error((err) => {
         res.status(500).send('Internal server error');
       });
     });
   }
 
   return {
-    create: function(req, res){
+    create: (req, res) => {
       return create(req, res);
     },
-    show: function(req, res){
+    show: (req, res) => {
       return show(req, res);
     },
-    update: function(req, res){
+    update: (req, res) => {
       return update(req, res);
     },
-    destroy: function(req, res){
+    destroy: (req, res) => {
       return destroy(req, res);
     },
-    getAll: function(req, res){
+    getAll: (req, res) => {
       return getAll(req, res);
     },
-    skipAuthFor: function() {
+    skipAuthFor: () => {
       return skipAuthFor();
     },
   }

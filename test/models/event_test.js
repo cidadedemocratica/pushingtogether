@@ -6,40 +6,40 @@ var Event = models.Event;
 var User = models.User;
 var Invite = models.Invite;
 
-describe('Event', function() {
-  describe('using valid attributes', function() {
+describe('Event', () => {
+  describe('using valid attributes', () => {
 
     var _owner = null, _event = null;
 
-    beforeEach( function(done) {
+    beforeEach( (done) => {
       User.create(helper.validUserAttributes)
-      .then( function(user) {
+      .then( (user) => {
         _owner = user;
         _owner.createEvent(helper.validEventAttributes)
-        .then( function(event){
+        .then( (event) => {
           _event = event;
           done();
         });
       });
     });
 
-    afterEach(function(done) {
+    afterEach((done) => {
       _event.destroy()
-      .then(function() {
+      .then(() => {
         _owner.destroy()
-        .then(function() {
+        .then(() => {
           done();
         });
       });
     });
 
-    it("should increment the Event's counter when event is created", function(done) {
+    it("should increment the Event's counter when event is created", (done) => {
       Event.count()
-      .then(function(oldCounter) {
+      .then((oldCounter) => {
         _owner.createEvent(helper.validEventAttributes)
-        .then(function(){
+        .then(() => {
           Event.count()
-          .then(function(currentCounter) {
+          .then((currentCounter) => {
             expect(currentCounter).toEqual(parseInt(oldCounter) + 1); 
             done();
           });
@@ -47,23 +47,23 @@ describe('Event', function() {
       });
     });
 
-    describe("event's relations", function() {
+    describe("event's relations", () => {
 
-      it('should return the event owner', function(done) {
+      it('should return the event owner', (done) => {
         _event.getOwner()
-        .then(function(owner) {
+        .then((owner) => {
           expect(owner.id).toEqual(_owner.id);
           done();
         });
       });
 
-      it('should not be saved without owner', function(done) {
+      it('should not be saved without owner', (done) => {
         Event.count()
-        .then(function(oldCounter) {
+        .then((oldCounter) => {
           Event.create(helper.validEventAttributes)
-          .then(function(){
+          .then(() => {
             Event.count()
-            .then(function(currentCounter) {
+            .then((currentCounter) => {
               expect(currentCounter).toEqual(parseInt(oldCounter)); 
               done();
             });
@@ -71,13 +71,13 @@ describe('Event', function() {
         });
       });
 
-      it('should be deleted when owner is deleted', function(done) {
+      it('should be deleted when owner is deleted', (done) => {
         Event.count()
-        .then(function(oldCounter) {
+        .then((oldCounter) => {
           _owner.destroy()
-          .then(function() {
+          .then(() => {
             Event.count()
-            .then(function(currentCounter) {
+            .then((currentCounter) => {
               expect(currentCounter).toEqual(parseInt(oldCounter) - 1);
               done();
             });
@@ -85,19 +85,19 @@ describe('Event', function() {
         });
       });
 
-      it('should increment the number of invited people', function(done) {
+      it('should increment the number of invited people', (done) => {
         User.create(helper.validUserAttributes)
-        .then(function(user) {
+        .then((user) => {
           user.createEvent(helper.validEventAttributes)
-          .then(function(event){
+          .then((event) => {
             event.getUsers()
-            .then(function(oldListOfUsers) {
+            .then((oldListOfUsers) => {
               event.addUser(user, {
                 isNotificationEnabled: false,
                 status: Invite.status.CONFIRMED })
-              .then(function () {
+              .then(() => {
                 event.getUsers()
-                .then(function (listOfUsers) {
+                .then((listOfUsers) => {
                   expect(listOfUsers.length).toEqual(oldListOfUsers.length + 1);
                   console.log(listOfUsers.length);
                   done();

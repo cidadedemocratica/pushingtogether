@@ -10,17 +10,17 @@ var User = require('../src/models/').User;
 // load the auth variables
 var configAuth = require('./auth');
 
-module.exports = function(passport) {
+module.exports = (passport) => {
   // used to serialize the user for the session
-  passport.serializeUser(function(user, done) {
+  passport.serializeUser((user, done) => {
 console.log("A===================================================================================");
     done(null, user.id);
   });
 
   // used to deserialize the user
-  passport.deserializeUser(function(id, done) {
+  passport.deserializeUser((id, done) => {
 console.log("B===================================================================================");
-    User.findById(id).then(function(user) {
+    User.findById(id).then((user) => {
       console.log("AAAAAAAAAAAAAAAAAAAAA = " + user.id)
       done(null, user.id);
     });
@@ -41,13 +41,13 @@ console.log("B==================================================================
   },
 
   // facebook will send back the token and profile
-  function(token, refreshToken, profile, done) {
+  (token, refreshToken, profile, done) => {
     // asynchronous
-    process.nextTick(function() {
+    process.nextTick(() => {
 console.log("1===================================================================================");
 
       // find the user in the database based on their facebook id
-      User.findOne({ 'facebookId' : profile.id }).then(function(user) {
+      User.findOne({ 'facebookId' : profile.id }).then((user) => {
 
 console.log("2===================================================================================");
         // if there is an error, stop everything and return that
@@ -77,7 +77,7 @@ console.log("5==================================================================
 
 console.log("6===================================================================================");
           // save our user to the database
-          newUser.save().then(function(user){
+          newUser.save().then((user) => {
 console.log("7===================================================================================");
             return done(null, newUser);
           });

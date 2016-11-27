@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  up: function (queryInterface, Sequelize) {
+  up: (queryInterface, Sequelize) => {
     queryInterface.addColumn('UsersPushabilities', 'pushabilityId', {
       type: Sequelize.INTEGER,
       references: {
@@ -11,7 +11,7 @@ module.exports = {
     });
   },
 
-  down: function (queryInterface, Sequelize) {
+  down: (queryInterface, Sequelize) => {
     queryInterface.removeColumn('UsersPushabilities', 'pushabilityId');
   }
 };

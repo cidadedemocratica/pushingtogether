@@ -10,19 +10,19 @@ var paths = {
 }
 
 // process JS files and return the stream.
-gulp.task('js', function () {
+gulp.task('js', () => {
     return gulp.src(paths.js)
 });
 
 // create a task that ensures the `js` task is complete before
 // reloading browsers
-gulp.task('js-watch', ['js'], function (done) {
+gulp.task('js-watch', ['js'], (done) => {
     browserSync.reload();
     done();
 });
 
 // use default task to launch Browsersync and watch JS files
-gulp.task('serve', ['js'], function () {
+gulp.task('serve', ['js'], () => {
 
     // Serve files from the root of this project
     browserSync.init({
@@ -36,7 +36,7 @@ gulp.task('serve', ['js'], function () {
     gulp.watch(paths.js, ['js-watch']);
 });
  
-gulp.task('default', function () {
+gulp.task('default', () => {
     return gulp.src(['source.js'])
             .pipe(jslint({ /* this object represents the JSLint directives being passed down */ }))
             .pipe(jslint.reporter( 'my-reporter' ));

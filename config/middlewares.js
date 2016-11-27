@@ -3,10 +3,10 @@
 var User = require('../src/models/').User;
 
 var Middlewares = {
-  Auth: function (req) {
+  Auth: (req) => {
     return (
       User.authenticate(req.headers.facebooktoken)
-      .then(function (currentUser) {
+      .then((currentUser) => {
         req.currentUser = currentUser;
       })
     );

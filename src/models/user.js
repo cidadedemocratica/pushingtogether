@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = function(sequelize, DataTypes){
+module.exports = (sequelize, DataTypes) => {
   var User = sequelize.define("User", {
       name: {
         type: DataTypes.STRING,
@@ -26,7 +26,7 @@ module.exports = function(sequelize, DataTypes){
     },
     {
       classMethods:{
-        associate:function(models){
+        associate:(models) => {
           User.hasMany(models.Pushability, { foreignKey: 'pusherId' });
           User.hasMany(models.Event, {
             foreignKey: 'ownerId',
@@ -44,14 +44,14 @@ module.exports = function(sequelize, DataTypes){
             foreignKey: 'userId'
           });
         },
-        authenticate: function(token) {
+        authenticate: (token) => {
           return(
             User.findOne({ where: {facebookToken: token} })
           );
         }
       },
       instanceMethods: {
-        canDestroy: function(user) {
+        canDestroy: (user) => {
           return this.facebookToken == user.facebookToken;
         }
       }

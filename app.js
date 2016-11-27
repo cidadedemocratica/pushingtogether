@@ -32,7 +32,7 @@ app.use(passport.session());
 app.use(expressRouter);
 appRouter(expressRouter, base, passport);
 
-app.listen(process.env.PT_PORT, function () {
+app.listen(process.env.PT_PORT, () => {
   console.log('Pushing Together listening on port '+process.env.PT_PORT+'!');
 });
 

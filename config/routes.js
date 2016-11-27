@@ -9,19 +9,19 @@ var User = require('../src/controllers/users_controller.js');
 var Event = require('../src/controllers/events_controller.js');
 var Middleware = require('./middlewares');
 
-module.exports = function(router, base, passport) {
+module.exports = (router, base, passport) => {
 
   facebookAuth(router, passport);
   resourcesFor(router, base, 'users', User.call());
   resourcesFor(router, base, 'events', Event.call());
 
   //test
-  router.get('/', function (req, res) {
+  router.get('/', (req, res) => {
     res.send(req.session.passport);
   });
 
   //error
-  router.get('/error', function (req, res) {
+  router.get('/error', (req, res) => {
     console.log("Errou!");
     res.send("ERROOOU!");
   });
@@ -29,41 +29,41 @@ module.exports = function(router, base, passport) {
 
 function resourcesFor(router, base, name, resource){
   //create
-  router.post(base + '/' + name , function (req, res) {
+  router.post(base + '/' + name , (req, res) => {
     Middleware.Auth(req)
-    .then(function () {
+    .then(() => {
       resource.create(req,res);
     });
   });
 
   //show
-  router.get(base + '/' + name + '/:id', function (req, res) {
+  router.get(base + '/' + name + '/:id', (req, res) => {
     Middleware.Auth(req)
-    .then(function (){
+    .then(() => {
       resource.show(req,res);
     });
   });
 
   //update
-  router.put(base + '/' + name + '/:id', function (req, res) {
+  router.put(base + '/' + name + '/:id', (req, res) => {
     Middleware.Auth(req)
-    .then(function (){
+    .then(() => {
       resource.update(req,res);
     });
   });
 
   //destroy
-  router.delete(base + '/' + name + '/:id', function (req, res) {
+  router.delete(base + '/' + name + '/:id', (req, res) => {
     Middleware.Auth(req)
-    .then(function (){
+    .then(() => {
       resource.destroy(req, res);
     });
   });
 
   //show all
-  router.get(base + '/' + name, function (req, res, next) {
+  router.get(base + '/' + name, (req, res, next) => {
     Middleware.Auth(req)
-    .then(function (){
+    .then(() => {
       resource.getAll(req,res);
     });
   });
@@ -82,7 +82,7 @@ function facebookAuth(router, passport){
   );
 
   //route for logging out
-  router.get('/logout', function(req, res) {
+  router.get('/logout', (req, res) => {
     req.logout();
     res.redirect('/');
   });
