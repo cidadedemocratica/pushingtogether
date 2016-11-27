@@ -8,12 +8,12 @@
 var ApplicationController = require('./application_controller');
 var Event = ApplicationController.Event
 
-module.exports = function() {
+module.exports = () => {
 
-  var create = function(req, res){
-    setImmediate(function() {
+  var create = (req, res) => {
+    setImmediate(() => {
       req.currentUser.createEvent(req.body)
-      .then(function(event) {
+      .then((event) => {
         if(event){
           // TODO: insert users to the event
           res.status(200).send({event: event});
@@ -24,10 +24,10 @@ module.exports = function() {
     });
   }
 
-  var show = function(req,res){
-    setImmediate(function() {
+  var show = (req,res) => {
+    setImmediate(() => {
       Event.findById(req.params.id)
-      .then(function(event) {
+      .then((event) => {
         if(event){
           res.status(200).send({event: event});
         }else {
@@ -37,13 +37,13 @@ module.exports = function() {
     });
   }
 
-  var update = function(req,res){
-    setImmediate(function() {
+  var update = (req,res) => {
+    setImmediate(() => {
       Event.findById(req.params.id)
-      .then(function(event) {
+      .then((event) => {
         if(event){
           event.update(req.body)
-          .then(function(event) {
+          .then((event) => {
             res.status(200).send({event: event});
           })
         }else {
@@ -53,10 +53,10 @@ module.exports = function() {
     });
   }
 
-  var destroy = function(req,res){
-    setImmediate(function() {
+  var destroy = (req,res) => {
+    setImmediate(() => {
       Event.destroy({ where: { id: req.params.id } })
-      .then(function(rows) {
+      .then((rows) => {
         if(rows) {
           res.status(200).send('Event deleted with success');
         }
@@ -67,13 +67,13 @@ module.exports = function() {
     });
   }
 
-  var getAll = function(req,res){
-    setImmediate(function () {
+  var getAll = (req,res) => {
+    setImmediate(() => {
       Event.all()
-      .then(function (events) {
+      .then((events) => {
         res.status(200).send({events: events});
       })
-      .error(function(err){
+      .error((err) => {
         res.status(500).send('Internal server error');
       });
     });
@@ -81,19 +81,19 @@ module.exports = function() {
   }
 
   return {
-    create: function(req,res){
+    create: (req,res) => {
       return create(req,res);
     },
-    show: function(req,res){
+    show: (req,res) => {
       return show(req,res);
     },
-    update: function(req,res){
+    update: (req,res) => {
       return update(req,res);
     },
-    destroy: function(req,res){
+    destroy: (req,res) => {
       return destroy(req,res);
     },
-    getAll: function(req,res){
+    getAll: (req,res) => {
       return getAll(req,res);
     }
   }

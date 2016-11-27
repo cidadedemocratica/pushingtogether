@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = function(sequelize, DataTypes){
+module.exports = (sequelize, DataTypes) => {
   var Invite = sequelize.define("Invite", {
       status: {
         type: DataTypes.STRING,
@@ -14,7 +14,7 @@ module.exports = function(sequelize, DataTypes){
     },
     {
       classMethods:{
-        associate:function(models){
+        associate:(models) => {
           Invite.belongsTo(models.Event, { foreignKey: 'eventId' });
           Invite.belongsTo(models.User, { foreignKey: 'userId' });
         },

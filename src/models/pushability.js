@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = function(sequelize, DataTypes){
+module.exports = (sequelize, DataTypes) => {
   var Pushability = sequelize.define("Pushability", {
       expiresAt: {
         type: DataTypes.DATE,
@@ -17,7 +17,7 @@ module.exports = function(sequelize, DataTypes){
     },
     {
       classMethods:{
-        associate:function(models){
+        associate:(models) => {
           Pushability.belongsTo(models.User, {as: 'pusher'});
           Pushability.belongsToMany(models.User, { through: 'UsersPushabilities' });
         },
