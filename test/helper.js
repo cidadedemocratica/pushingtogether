@@ -2,6 +2,7 @@ var models = require('../src/models');
 var Pushability = models.Pushability
 var User = models.User
 
+
 module.exports = {
   validUserAttributes: {
     name: "User test",
@@ -33,11 +34,6 @@ module.exports = {
 
   validPushabilityAttributes: {
     expiresAt: Date.now(),
-    type: Pushability.types.EVENT
-  }
-
-  validPushabilitytAttributes: {
-    expiresAt: Date.now()
     type: Pushability.types.EVENT
   }
 }

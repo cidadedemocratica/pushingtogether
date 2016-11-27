@@ -24,8 +24,7 @@ describe('Pushability', () => {
           });
         });
       });
-
-
+      
       it("should return all pushability a user has", (done) => {
         _pusher.getPushabilities()
         .then((oldListOfPushabilities) => {
@@ -54,6 +53,25 @@ describe('Pushability', () => {
         });
       });
 
+      it("should return all pushability a user has", (done) => {
+        _puser.getPushabilities()
+        .then((pushabilities) => {
+          expect(pushabilites.length).toBe(1);
+        });
+      });
+
+      it("should add some user as a target", (done) => {
+        _pushability.getUsers()
+        .then((oldListOfUsers) => {
+          _pushability.addUser(_pusher)
+          .then( () => {
+            _pushability.getUsers()
+            .then( (listOfUsers) => {
+              expect(listOfUsers.length).toEqual(oldListOfUsers.length);
+            });
+          });
+        });
+      });
     });
   });
 });
