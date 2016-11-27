@@ -28,4 +28,9 @@ module.exports = {
       models.User.create(attributes)
     );
   }
+
+  validPushabilitytAttributes: {
+    expiresAt: Date.now()
+    type: Pushability.types.EVENT
+  }
 }
