@@ -49,11 +49,6 @@ module.exports = (sequelize, DataTypes) => {
             User.findOne({ where: {facebookToken: token} })
           );
         },
-        exists: function(id) {
-          return(
-            User.findOne({ where: {facebookToken: token} })
-          );
-        }
       },
       instanceMethods: {
         canDestroy: (currentUser, targetUser) => {
