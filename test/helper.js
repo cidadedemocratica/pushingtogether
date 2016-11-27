@@ -35,4 +35,9 @@ module.exports = {
     expiresAt: Date.now(),
     type: Pushability.types.EVENT
   }
+
+  validPushabilitytAttributes: {
+    expiresAt: Date.now()
+    type: Pushability.types.EVENT
+  }
 }
