@@ -18,14 +18,10 @@ module.exports = (sequelize, DataTypes) => {
     {
       classMethods:{
         associate:(models) => {
-          Pushability.belongsTo(models.User,{
-            as: 'pusher',
-            foreignKey: { allowNull: false },
-            onDelete: 'CASCADE'
-          });
+          Pushability.belongsTo(models.User, {as: 'pusher'});
           Pushability.belongsToMany(models.User, {
             through: 'UsersPushabilities',
-            foreignKey: 'pushabilityId' 
+            foreignKey: 'pushabilityId'
           });
         },
         types: {

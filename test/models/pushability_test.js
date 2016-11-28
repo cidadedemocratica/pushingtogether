@@ -11,35 +11,31 @@ describe('Pushability', () => {
       var _pusher = null, _pushability = null;
 
       beforeEach( (done) => {
-        User.create(helper.validUserAttributes)
-        .then( (user) => {
-          user.createPushability(helper.validPushabilitytAttributes)
-          .then( (pushability) => {
-            _pushability = pushability;
+        models.sequelize.sync({force: true})
+        .then(() => {
+          User.create(helper.validUserAttributes)
+          .then( (user) => {
             _pusher = user;
-          }).then(done);
+            _pusher.createPushability(helper.validPushabilityAttributes)
+            .then( (pushability) => {
+              _pushability = pushability;
+              done();
+            });
+          });
         });
       });
 
-      afterEach( (done) => {
-        User.destroy({
-          where: { id: _pusher.id }
-        })
-        .then( (rows) => {
-          expect(rows).toExist();
-          done();
-        });
-      });
 
       it("should return all pushability a user has", (done) => {
         _pusher.getPushabilities()
         .then((oldListOfPushabilities) => {
-          _pusher.createPushability(helper.validPushabilitytAttributes)
+          _pusher.createPushability(helper.validPushabilityAttributes)
           .then( (pushability) => {
             _pusher.getPushabilities()
             .then( (listOfPushabilities) => {
               expect(listOfPushabilities.length).toEqual(oldListOfPushabilities.length + 1);
-            }).then(done);
+              done();
+            });
           });
         });
       });
@@ -56,7 +52,7 @@ describe('Pushability', () => {
             });
           });
         });
-      }); 
+      });
 
     });
   });

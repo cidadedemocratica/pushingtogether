@@ -12,23 +12,16 @@ describe('Event', () => {
     var _owner = null, _event = null;
 
     beforeEach( (done) => {
-      User.create(helper.validUserAttributes)
-      .then( (user) => {
-        _owner = user;
-        _owner.createEvent(helper.validEventAttributes)
-        .then( (event) => {
-          _event = event;
-          done();
-        });
-      });
-    });
-
-    afterEach((done) => {
-      _event.destroy()
+      models.sequelize.sync({force: true})
       .then(() => {
-        _owner.destroy()
-        .then(() => {
-          done();
+        User.create(helper.validUserAttributes)
+        .then( (user) => {
+          _owner = user;
+          _owner.createEvent(helper.validEventAttributes)
+          .then( (event) => {
+            _event = event;
+            done();
+          });
         });
       });
     });
@@ -40,7 +33,7 @@ describe('Event', () => {
         .then(() => {
           Event.count()
           .then((currentCounter) => {
-            expect(currentCounter).toEqual(parseInt(oldCounter) + 1); 
+            expect(currentCounter).toEqual(parseInt(oldCounter) + 1);
             done();
           });
         });
@@ -64,7 +57,7 @@ describe('Event', () => {
           .then(() => {
             Event.count()
             .then((currentCounter) => {
-              expect(currentCounter).toEqual(parseInt(oldCounter)); 
+              expect(currentCounter).toEqual(parseInt(oldCounter));
               done();
             });
           });
@@ -86,22 +79,19 @@ describe('Event', () => {
       });
 
       it('should increment the number of invited people', (done) => {
-        User.create(helper.validUserAttributes)
-        .then((user) => {
-          user.createEvent(helper.validEventAttributes)
-          .then((event) => {
-            event.getUsers()
-            .then((oldListOfUsers) => {
-              event.addUser(user, {
-                isNotificationEnabled: false,
-                status: Invite.status.CONFIRMED })
-              .then(() => {
-                event.getUsers()
-                .then((listOfUsers) => {
-                  expect(listOfUsers.length).toEqual(oldListOfUsers.length + 1);
-                  console.log(listOfUsers.length);
-                  done();
-                });
+        _owner.createEvent(helper.validEventAttributes)
+        .then((event) => {
+          event.getUsers()
+          .then((oldListOfUsers) => {
+            event.addUser(_owner, {
+              isNotificationEnabled: false,
+              status: Invite.status.CONFIRMED })
+            .then(() => {
+              event.getUsers()
+              .then((listOfUsers) => {
+                expect(listOfUsers.length).toEqual(oldListOfUsers.length + 1);
+                console.log(listOfUsers.length);
+                done();
               });
             });
           });

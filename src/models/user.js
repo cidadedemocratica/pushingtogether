@@ -28,7 +28,9 @@ module.exports = (sequelize, DataTypes) => {
       classMethods:{
         associate:(models) => {
           User.hasMany(models.Pushability, {
-            foreignKey: 'pusherId'
+            foreignKey: 'pusherId',
+            onDelete: 'cascade',
+            hooks: true
           });
           User.hasMany(models.Event, {
             foreignKey: 'ownerId',
