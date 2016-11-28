@@ -24,7 +24,7 @@ describe('Pushability', () => {
           });
         });
       });
-      
+
       it("should return all pushability a user has", (done) => {
         _pusher.getPushabilities()
         .then((oldListOfPushabilities) => {
@@ -54,9 +54,15 @@ describe('Pushability', () => {
       });
 
       it("should return all pushability a user has", (done) => {
-        _puser.getPushabilities()
-        .then((pushabilities) => {
-          expect(pushabilites.length).toBe(1);
+        _pusher.getPushabilities()
+        .then((oldListOfPushabilities) => {
+          _pusher.createPushability(helper.validPushabilitytAttributes)
+          .then( (pushability) => {
+            _pusher.getPushabilities()
+            .then( (listOfPushabilities) => {
+              expect(listOfPushabilities.length).toEqual(oldListOfPushabilities.length + 1);
+            }).then(done);
+          });
         });
       });
 
@@ -67,7 +73,8 @@ describe('Pushability', () => {
           .then( () => {
             _pushability.getUsers()
             .then( (listOfUsers) => {
-              expect(listOfUsers.length).toEqual(oldListOfUsers.length);
+              expect(listOfUsers.length).toEqual(oldListOfUsers.length + 1);
+              done();
             });
           });
         });
