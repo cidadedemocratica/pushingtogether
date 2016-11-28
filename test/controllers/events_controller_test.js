@@ -39,6 +39,17 @@ describe('EventControllerTest', function() {
         });
       });
 
+      it('event cannot be created by users with an active pushability', (done) => {
+        chai.request(server)
+        .post("/api/v1/events/")
+        .set('facebookToken', _user.facebookToken)
+        .send(helper.invalidEventCreateParams)
+        .end((err, res) => {
+          expect(res.status).toBe(400);
+          done();
+        });
+      });
+
       it('event can be created by users with an active pushability', (done) => {
         chai.request(server)
         .post("/api/v1/events/")

@@ -30,15 +30,14 @@ module.exports = () => {
           .then((users) => {
             event.addUsers(users)
             .then(() => {
-              if(event) {
-                res.status(200).send({event: event});
-              }
-              else {
-                res.status(400).send('Event cannot be created');
-              }
+              res.status(200).send({event: event});
             });
           });
         });
+      })
+      .catch((err) => {
+        console.error("ADFADSFADSFADSFADSFADFADFADSFADSFADSFADFADSFA");
+        res.status(400).send('Event cannot be created');
       });
     });
   }
