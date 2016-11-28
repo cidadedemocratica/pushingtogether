@@ -9,11 +9,16 @@ module.exports = (sequelize, DataTypes) => {
           notEmpty: true
         }
       },
-
-      type: {
+      active: DataTypes.BOOLEAN,
+      type: DataTypes.STRING,
+      //TODO: It must be a relation between conversation and pushability
+      conversationId: {
         type: DataTypes.STRING,
-      }
-
+        allowNull: false,
+        validate: {
+          notEmpty: true
+        }
+      },
     },
     {
       classMethods:{
