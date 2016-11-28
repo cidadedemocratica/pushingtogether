@@ -34,7 +34,7 @@ module.exports = {
 
   validPushabilityAttributes: {
     expiresAt: Date.now(),
-    type: Pushability.types.EVENT
+    type: Pushability.types.EVENT,
     conversationId: 'conversationIdTest',
     active: true
   },
