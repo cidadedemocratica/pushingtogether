@@ -13,18 +13,15 @@ describe('UsersControllerTest', function() {
   var _user = null;
 
   beforeEach( function(done) {
-    models.User.create(helper.validUserAttributes)
-    .then(function(user) {
-      _user = user;
-      done();
+    models.sequelize.sync({force:true}).then(() => {
+      models.User.create(helper.validUserAttributes)
+      .then(function(user) {
+        _user = user;
+        done();
+      });
     });
   });
 
-  afterEach(function(done) {
-    _user.destroy().then(function() {
-      done();
-    })
-  });
 
   describe('/DELETE:id users', function() {
     describe('The user is authenticated', function() {
@@ -49,8 +46,10 @@ describe('UsersControllerTest', function() {
       it('a user should not be able to destroy others', function(done) {
         helper.createUser("other")
         .then(function(otherUser) {
+          console.log("OTHER USER", otherUser.id);
           chai.request(server)
-          .delete("/api/v1/users/" + _user.id)
+          .delete("/api/v1/users/" + otherUser.id)
+          .set('facebookToken', _user.facebookToken)
           .end(function (err, res) {
             expect(res.status).toBe(404); 
             done();
@@ -60,14 +59,6 @@ describe('UsersControllerTest', function() {
     });
 
     describe('The user is not authenticated', function() {
-      it('a user should not be able to destroy', function(done) {
-        chai.request(server)
-        .delete("/api/v1/users/" + _user.id)
-        .end(function (err, res) {
-          expect(res.status).toBe(404); 
-          done();
-        });
-      });
     });
   });
 });

@@ -22,6 +22,8 @@ module.exports = {
   createUser: function(name) {
     attributes = this.validUserAttributes;
     attributes.name = name;
+    attributes.email = name + attributes.email;
+    attributes.facebookToken = attributes.facebookToken + name;
     return (
       models.User.create(attributes)
     );

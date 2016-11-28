@@ -56,8 +56,8 @@ module.exports = (sequelize, DataTypes) => {
         }
       },
       instanceMethods: {
-        canDestroy: (user) => {
-          return this.facebookToken == user.facebookToken;
+        canDestroy: (currentUser, targetUser) => {
+          return currentUser.facebookToken == targetUser.facebookToken;
         }
       }
     }

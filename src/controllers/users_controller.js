@@ -67,12 +67,11 @@ module.exports = () => {
     });
   }
 
-  var destroy = function(req, res, currentUser){
+  var destroy = function(req, res){
     setImmediate(function () {
-      models.User.findById(req.params.id)
+      User.findById(req.params.id)
       .then(function (user) {
-        console.log("na controller",req.params.id);
-        if(req.currentUser && user && req.currentUser.canDestroy(user)) {
+        if(req.currentUser && user && user.canDestroy(req.currentUser, user)) {
           user.destroy()
           .then((u) => {
             res.status(200).send(user);
@@ -85,7 +84,6 @@ module.exports = () => {
           res.status(404).send('User not found or unauthorized');
         }
       })
-
       .error((err) => {
         res.status(500).send('Internal server error');
       });
