@@ -24,11 +24,11 @@ module.exports = () => {
         }
       })
       .then((pushability) => {
-        currentUser.createEvent(req.body)
+        return currentUser.createEvent(req.body)
         .then((event) => {
-          pushability.getUsers()
+          return pushability.getUsers()
           .then((users) => {
-            event.addUsers(users)
+            return event.addUsers(users)
             .then(() => {
               res.status(200).send({event: event});
             });
@@ -36,7 +36,6 @@ module.exports = () => {
         });
       })
       .catch((err) => {
-        console.error("ADFADSFADSFADSFADSFADFADFADSFADSFADSFADFADSFA");
         res.status(400).send('Event cannot be created');
       });
     });
