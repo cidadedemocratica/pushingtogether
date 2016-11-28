@@ -7,7 +7,7 @@
 
 var User = require('../src/controllers/users_controller.js');
 var Event = require('../src/controllers/events_controller.js');
-var Pushability = require('../src/controllers/pushability_controller.js');
+var Pushability = require('../src/controllers/pushabilities_controller.js');
 var Middleware = require('./middlewares');
 
 module.exports = (router, base, passport) => {
