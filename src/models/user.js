@@ -48,6 +48,11 @@ module.exports = (sequelize, DataTypes) => {
           return(
             User.findOne({ where: {facebookToken: token} })
           );
+        },
+        exists: function(id) {
+          return(
+            User.findOne({ where: {facebookToken: token} })
+          );
         }
       },
       instanceMethods: {

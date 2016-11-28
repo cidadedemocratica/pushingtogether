@@ -36,3 +36,5 @@ app.listen(process.env.PT_PORT, () => {
   console.log('Pushing Together listening on port '+process.env.PT_PORT+'!');
 });
 
+module.exports = app;
+

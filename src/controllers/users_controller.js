@@ -67,10 +67,11 @@ module.exports = () => {
     });
   }
 
-  var destroy = (req, res) => {
-    setImmediate(() => {
-      User.findById(req.params.id)
-      .then((user) => {
+  var destroy = function(req, res, currentUser){
+    setImmediate(function () {
+      models.User.findById(req.params.id)
+      .then(function (user) {
+        console.log("na controller",req.params.id);
         if(req.currentUser && user && req.currentUser.canDestroy(user)) {
           user.destroy()
           .then((u) => {

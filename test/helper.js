@@ -1,3 +1,5 @@
+var models = require('../src/models');
+
 module.exports = {
   validUserAttributes: {
     name: "User test",
@@ -15,5 +17,13 @@ module.exports = {
     description: "Description Test Description Test",
     address: "Address Test",
     date: Date.now()
+  },
+
+  createUser: function(name) {
+    attributes = this.validUserAttributes;
+    attributes.name = name;
+    return (
+      models.User.create(attributes)
+    );
   }
 }
