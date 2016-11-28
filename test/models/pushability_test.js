@@ -56,12 +56,13 @@ describe('Pushability', () => {
       it("should return all pushability a user has", (done) => {
         _pusher.getPushabilities()
         .then((oldListOfPushabilities) => {
-          _pusher.createPushability(helper.validPushabilitytAttributes)
+          _pusher.createPushability(helper.validPushabilityAttributes)
           .then( (pushability) => {
             _pusher.getPushabilities()
             .then( (listOfPushabilities) => {
               expect(listOfPushabilities.length).toEqual(oldListOfPushabilities.length + 1);
-            }).then(done);
+              done();
+            });
           });
         });
       });
