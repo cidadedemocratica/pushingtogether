@@ -7,6 +7,7 @@
 
 var User = require('../src/controllers/users_controller.js');
 var Event = require('../src/controllers/events_controller.js');
+var Pushability = require('../src/controllers/pushabilities_controller.js');
 var Middleware = require('./middlewares');
 
 module.exports = (router, base, passport) => {
@@ -14,6 +15,7 @@ module.exports = (router, base, passport) => {
   facebookAuth(router, passport);
   resourcesFor(router, base, 'users', User.call());
   resourcesFor(router, base, 'events', Event.call());
+  resourcesFor(router, base, 'pushabilities', Pushability.call());
 
   //test
   router.get('/', (req, res) => {

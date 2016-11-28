@@ -27,16 +27,20 @@ module.exports = (sequelize, DataTypes) => {
     {
       classMethods:{
         associate:(models) => {
-          User.hasMany(models.Pushability, { foreignKey: 'pusherId' });
+          User.hasMany(models.Pushability, {
+            foreignKey: 'pusherId',
+            onDelete: 'cascade',
+            hooks: true
+          });
           User.hasMany(models.Event, {
             foreignKey: 'ownerId',
             onDelete: 'cascade',
             hooks: true
           });
           User.belongsToMany(models.Pushability, {
-            through: "UserPushability",
+            through: "UsersPushabilities",
+            as: 'targets',
             foreignKey: 'userId',
-            as: "targets"
           });
           User.belongsToMany(models.Event, {
             through: models.Invite,
@@ -49,11 +53,6 @@ module.exports = (sequelize, DataTypes) => {
             User.findOne({ where: {facebookToken: token} })
           );
         },
-        exists: function(id) {
-          return(
-            User.findOne({ where: {facebookToken: token} })
-          );
-        }
       },
       instanceMethods: {
         canDestroy: (currentUser, targetUser) => {

@@ -7,19 +7,38 @@
 
 var ApplicationController = require('./application_controller');
 var Event = ApplicationController.Event
+var Pushability = ApplicationController.Pushability
 
 module.exports = () => {
 
   var create = (req, res) => {
     setImmediate(() => {
-      req.currentUser.createEvent(req.body)
-      .then((event) => {
-        if(event){
-          // TODO: insert users to the event
-          res.status(200).send({event: event});
-        }else {
-          res.status(400).send('Event cannot be created');
+      var currentUser = req.currentUser;
+      var conversationId = req.body.conversationId;
+
+      Pushability.findOne({
+        where: {
+          conversationId: conversationId,
+          active: true,
+          type: Pushability.types.EVENT
         }
+      })
+      .then((pushability) => {
+        currentUser.createEvent(req.body)
+        .then((event) => {
+          pushability.getUsers()
+          .then((users) => {
+            event.addUsers(users)
+            .then(() => {
+              if(event) {
+                res.status(200).send({event: event});
+              }
+              else {
+                res.status(400).send('Event cannot be created');
+              }
+            });
+          });
+        });
       });
     });
   }

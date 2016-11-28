@@ -67,10 +67,10 @@ module.exports = () => {
     });
   }
 
-  var destroy = function(req, res){
-    setImmediate(function () {
+  var destroy = (req, res) => {
+    setImmediate(() => {
       User.findById(req.params.id)
-      .then(function (user) {
+      .then((user) => {
         if(req.currentUser && user && user.canDestroy(req.currentUser, user)) {
           user.destroy()
           .then((u) => {
@@ -84,6 +84,7 @@ module.exports = () => {
           res.status(404).send('User not found or unauthorized');
         }
       })
+
       .error((err) => {
         res.status(500).send('Internal server error');
       });
