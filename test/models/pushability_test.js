@@ -2,41 +2,45 @@ var expect = require('expect');
 var models = require('../../src/models');
 var helper = require('../helper');
 
-var Pushbility = models.Pushability;
+var Pushability = models.Pushability;
 var User = models.User;
 
 describe('Pushability', () => {
   describe('Check pushability relations', () => {
-
     describe('Using valid attributes', () => {
       var _pusher = null, _pushability = null;
 
       beforeEach( (done) => {
         User.create(helper.validUserAttributes)
         .then( (user) => {
-          _pusher = user;
-          _pusher.createPushability(helper.validPushabilitytAttributes)
+          user.createPushability(helper.validPushabilitytAttributes)
           .then( (pushability) => {
             _pushability = pushability;
-            done();
-          });
+            _pusher = user;
+          }).then(done);
         });
       });
 
       afterEach( (done) => {
-        _pushability .destroy()
-        .then( () => {
-          _pusher.destroy()
-          .then( () => {
-            done();
-          });
+        User.destroy({
+          where: { id: _pusher.id }
+        })
+        .then( (rows) => {
+          expect(rows).toExist();
+          done();
         });
       });
 
       it("should return all pushability a user has", (done) => {
-        _puser.getPushabilities()
-        .then((pushabilities) => {
-          expect(pushabilites.length).toBe(1);
+        _pusher.getPushabilities()
+        .then((oldListOfPushabilities) => {
+          _pusher.createPushability(helper.validPushabilitytAttributes)
+          .then( (pushability) => {
+            _pusher.getPushabilities()
+            .then( (listOfPushabilities) => {
+              expect(listOfPushabilities.length).toEqual(oldListOfPushabilities.length + 1);
+            }).then(done);
+          });
         });
       });
 
@@ -47,7 +51,8 @@ describe('Pushability', () => {
           .then( () => {
             _pushability.getUsers()
             .then( (listOfUsers) => {
-              expect(listOfUsers.length).toEqual(oldListOfUsers.length);
+              expect(listOfUsers.length).toEqual(oldListOfUsers.length + 1);
+              done();
             });
           });
         });
