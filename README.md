@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/cidadedemocratica/pushingtogether.svg?branch=master)](https://travis-ci.org/cidadedemocratica/pushingtogether)
+[![Test Coverage](https://codeclimate.com/github/cidadedemocratica/pushingtogether/badges/coverage.svg)](https://codeclimate.com/github/cidadedemocratica/pushingtogether/coverage)
+
 # pushingtogether
 Pushing together project developed during ParticipaLAB Collective Inteligence for Democracy, this project is based on pol.is
 
