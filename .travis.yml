@@ -2,15 +2,20 @@ language: node_js
 sudo: required
 node_js:
   - "6.9.0"
-
+env:
+  - CXX=g++-4.8
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
 before_script:
   - npm install
   - npm install -g codeclimate-test-reporter
   - scripts/quickstart.sh
   - npm run db:migrate
-
 script:
   - npm run coverage
-
 after_success:
   codeclimate-test-reporter < coverage/lcov.info
