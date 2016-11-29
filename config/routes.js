@@ -8,6 +8,7 @@
 var User = require('../src/controllers/users_controller.js');
 var Event = require('../src/controllers/events_controller.js');
 var Pushability = require('../src/controllers/pushabilities_controller.js');
+var Invite = require('../src/controllers/invites_controller.js');
 var Middleware = require('./middlewares');
 
 module.exports = (router, base, passport) => {
@@ -27,6 +28,14 @@ module.exports = (router, base, passport) => {
     console.log("Errou!");
     res.send("ERROOOU!");
   });
+
+  router.post(base + '/events/:id/accept', (req, res) => {
+    Middleware.Auth(req)
+    .then(() => {
+      Invite.accept(req,res);
+    });
+  });  
+
 };
 
 function resourcesFor(router, base, name, resource){
