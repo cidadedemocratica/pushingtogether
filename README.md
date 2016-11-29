@@ -1,4 +1,5 @@
 # pushingtogether
+[![Code Climate](https://codeclimate.com/github/cidadedemocratica/pushingtogether/badges/gpa.svg)](https://codeclimate.com/github/cidadedemocratica/pushingtogether)  
 Pushing together project developed during ParticipaLAB Collective Inteligence for Democracy, this project is based on pol.is
 
 ## Installing
