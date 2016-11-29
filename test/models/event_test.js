@@ -90,7 +90,6 @@ describe('Event', () => {
               event.getUsers()
               .then((listOfUsers) => {
                 expect(listOfUsers.length).toEqual(oldListOfUsers.length + 1);
-                console.log(listOfUsers.length);
                 done();
               });
             });

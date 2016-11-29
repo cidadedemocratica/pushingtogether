@@ -22,12 +22,11 @@ module.exports = (router, base, passport) => {
 
   //test
   router.get('/', (req, res) => {
-    res.send(req.session.passport);
+    res.send(req.user);
   });
 
   //error
   router.get('/error', (req, res) => {
-    console.log("Errou!");
     res.send("ERROOOU!");
   });
 
@@ -36,7 +35,7 @@ module.exports = (router, base, passport) => {
     .then(() => {
       Invite.call().accept(req,res);
     });
-  });  
+  });
 
 };
 

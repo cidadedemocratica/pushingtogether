@@ -21,7 +21,7 @@ module.exports = {
         password: Sequelize.STRING,
         facebookId: Sequelize.STRING,
         facebookToken: Sequelize.TEXT,
-        externalId: Sequelize.INTEGER,
+        externalId: Sequelize.STRING,
       },
       {
         engine: 'MYISAM', // default: 'InnoDB'
