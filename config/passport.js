@@ -19,7 +19,7 @@ module.exports = (passport) => {
   // used to deserialize the user
   passport.deserializeUser((id, done) => {
     User.findById(id).then((user) => {
-      done(null, user.id);
+      done(null, user);
     });
   });
 
@@ -42,15 +42,12 @@ module.exports = (passport) => {
     // asynchronous
     process.nextTick(() => {
       // find the user in the database based on their facebook id
-      User.findOne({ 'facebookToken' : token }).then((user) => {
+      User.find({ where: {'facebookId' : profile.id } }).then((user) => {
 
         // if there is an error, stop everything and return that
         // ie an error connecting to the database
         // if the user is found, then log them in
-        if (user != null) {
-          console.log("======================================");
-          console.log("achou o usuario");
-          console.log(user.name);
+        if (user) {
           return done(null, user); // user found, return that user
         } else {
           // if there is no user found with that facebook id, create them

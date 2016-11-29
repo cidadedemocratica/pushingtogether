@@ -46,12 +46,11 @@ describe('UsersControllerTest', function() {
       it('a user should not be able to destroy others', function(done) {
         helper.createUser("other")
         .then(function(otherUser) {
-          console.log("OTHER USER", otherUser.id);
           chai.request(server)
           .delete("/api/v1/users/" + otherUser.id)
           .set('facebookToken', _user.facebookToken)
           .end(function (err, res) {
-            expect(res.status).toBe(404); 
+            expect(res.status).toBe(404);
             done();
           });
         });
@@ -62,5 +61,3 @@ describe('UsersControllerTest', function() {
     });
   });
 });
-
-
