@@ -9,6 +9,7 @@ var User = require('../src/controllers/users_controller.js');
 var Event = require('../src/controllers/events_controller.js');
 var Pushability = require('../src/controllers/pushabilities_controller.js');
 var Invite = require('../src/controllers/invites_controller.js');
+var Conversation = require('../src/controllers/conversations_controller.js');
 var Middleware = require('./middlewares');
 
 module.exports = (router, base, passport) => {
@@ -17,6 +18,7 @@ module.exports = (router, base, passport) => {
   resourcesFor(router, base, 'users', User.call());
   resourcesFor(router, base, 'events', Event.call());
   resourcesFor(router, base, 'pushabilities', Pushability.call());
+  resourcesFor(router, base, 'conversations', Conversation.call());
 
   //test
   router.get('/', (req, res) => {

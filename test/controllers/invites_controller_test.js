@@ -20,7 +20,7 @@ describe('EventControllerTest', function() {
       User.create(helper.validUserAttributes)
       .then( (user) => {
         _owner = user;
-        _owner.createEvent(helper.validEventCreateParams)
+        _owner.createEvent(helper.validEventAttributes)
         .then((event) => {
           _event = event;
           User.create(helper.validOtherUserAttributes)

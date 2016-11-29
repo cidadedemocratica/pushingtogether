@@ -13,7 +13,7 @@ chai.use(chaiHttp);
 describe('EventControllerTest', function() {
 
   var _user = null;
-  var _conversationId = 'conversationIdTest'
+  var _conversation = null;
 
   beforeEach( (done) => {
     models.sequelize.sync({force: true})
@@ -32,10 +32,17 @@ describe('EventControllerTest', function() {
       var _pushability = null;
 
       beforeEach( (done) => {
-        Pushability.create(helper.validPushabilityAttributes)
-        .then( (pushability) => {
-          _pushability = pushability;
-          done();
+        _user.createConversation(helper.validConversationAttributes)
+        .then((conversation) => {
+          _conversation = conversation;
+          Pushability.create(helper.validPushabilityAttributes)
+          .then( (pushability) => {
+            _pushability = pushability;
+            pushability.setConversation(conversation)
+            .then(() => {
+              done();
+            });
+          });
         });
       });
 
@@ -43,7 +50,7 @@ describe('EventControllerTest', function() {
         chai.request(server)
         .post("/api/v1/events/")
         .set('facebookToken', _user.facebookToken)
-        .send(helper.invalidEventCreateParams)
+        .send(helper.validEventAttributes) // without conversation id
         .end((err, res) => {
           expect(res.status).toBe(400);
           done();
@@ -54,7 +61,13 @@ describe('EventControllerTest', function() {
         chai.request(server)
         .post("/api/v1/events/")
         .set('facebookToken', _user.facebookToken)
-        .send(helper.validEventCreateParams)
+        .send({
+          title: "Test Event",
+          description: "Description Test Description Test",
+          address: "Address Test",
+          date: Date.now(),
+          conversationId: _conversation.id
+        })
         .end((err, res) => {
           expect(res.status).toBe(200);
           done();

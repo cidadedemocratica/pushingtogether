@@ -37,6 +37,11 @@ module.exports = (sequelize, DataTypes) => {
             onDelete: 'cascade',
             hooks: true
           });
+          User.hasMany(models.Conversation, {
+            foreignKey: 'ownerId',
+            onDelete: 'cascade',
+            hooks: true
+          });
           User.belongsToMany(models.Pushability, {
             through: "UsersPushabilities",
             as: 'targets',
