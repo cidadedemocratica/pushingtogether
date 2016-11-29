@@ -24,21 +24,19 @@ module.exports = () => {
         }
       })
       .then((pushability) => {
-        currentUser.createEvent(req.body)
+        return currentUser.createEvent(req.body)
         .then((event) => {
-          pushability.getUsers()
+          return pushability.getUsers()
           .then((users) => {
-            event.addUsers(users)
+            return event.addUsers(users)
             .then(() => {
-              if(event) {
-                res.status(200).send({event: event});
-              }
-              else {
-                res.status(400).send('Event cannot be created');
-              }
+              res.status(200).send({event: event});
             });
           });
         });
+      })
+      .catch((err) => {
+        res.status(400).send('Event cannot be created');
       });
     });
   }
