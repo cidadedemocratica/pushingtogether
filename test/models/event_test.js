@@ -42,6 +42,8 @@ describe('Event', () => {
 
     describe("event's relations", () => {
 
+      let _oldCounter = null;
+
       it('should return the event owner', (done) => {
         _event.getOwner()
         .then((owner) => {
@@ -53,13 +55,17 @@ describe('Event', () => {
       it('should not be saved without owner', (done) => {
         Event.count()
         .then((oldCounter) => {
-          Event.create(helper.validEventAttributes)
-          .then(() => {
-            Event.count()
-            .then((currentCounter) => {
-              expect(currentCounter).toEqual(parseInt(oldCounter));
-              done();
-            });
+          _oldCounter = oldCounter;
+          helper.validEventAttributes.ownerId = null;
+          return Event.create(helper.validEventAttributes)
+          .then((event) => {
+             done(new Error("Event should not be created withou an owner"));
+          });
+        }).catch((err) => {
+          Event.count()
+          .then((currentCounter) => {
+            expect(currentCounter).toEqual(parseInt(_oldCounter));
+            done();
           });
         });
       });

@@ -30,7 +30,13 @@ module.exports = (sequelize, DataTypes) => {
     {
       classMethods:{
         associate:(models) => {
-          Event.belongsTo(models.User, {as: 'owner'});
+          Event.belongsTo(models.User, {
+            as: 'owner',
+            foreignKey: {
+              name: 'ownerId',
+              allowNull: false
+            },
+          });
           Event.belongsToMany(models.User, {
             through: models.Invite,
             foreignKey: 'eventId'
