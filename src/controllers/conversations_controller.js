@@ -15,10 +15,11 @@ module.exports = () => {
       var currentUser = req.currentUser;
 
       currentUser.createConversation(req.body)
-      .then((pushability) => {
-        res.status(200).send({event: event});
+      .then((conversation) => {
+        res.status(200).send({conversation: conversation});
       })
       .catch((err) => {
+        console.error(err);
         res.status(400).send('Conversation cannot be created');
       });
     });
