@@ -44,7 +44,7 @@ module.exports = () => {
       .then((conversation) => {
         if(conversation){
           conversation.update(req.body)
-          .then((event) => {
+          .then((conversation) => {
             res.status(200).send({conversation: conversation});
           })
         }else {
