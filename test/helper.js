@@ -46,30 +46,16 @@ module.exports = {
   validPushabilityAttributes: {
       expiresAt: Date.now(),
       type: Pushability.types.EVENT,
-      conversationId: 'conversationIdTest',
       active: true
   },
 
   invalidPushabilityAttributes: {
       expiresAt: Date.now(),
       type: Pushability.types.EVENT,
-      conversationId: 'conversationIdTest',
       active: false
   },
 
-  validEventCreateParams: {
-      title: "Test Event",
-      description: "Description Test Description Test",
-      address: "Address Test",
-      date: Date.now(),
-      conversationId: 'conversationIdTest'
-  },
-
-  invalidEventCreateParams: {
-      title: "Test Event",
-      description: "Description Test Description Test",
-      address: "Address Test",
-      date: Date.now(),
-      conversationId: null
+  validConversationAttributes: {
+    externalUrl: "9yb3fyjsbu"
   }
 }

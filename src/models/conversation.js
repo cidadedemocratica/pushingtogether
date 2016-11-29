@@ -8,6 +8,11 @@ module.exports = (sequelize, DataTypes) => {
       classMethods:{
         associate:(models) => {
           Conversation.belongsTo(models.User, {as: 'owner'});
+          Conversation.hasMany(models.Pushability, {
+            foreignKey: 'conversationId',
+            onDelete: 'cascade',
+            hooks: true
+          });
         }
       }
     }
