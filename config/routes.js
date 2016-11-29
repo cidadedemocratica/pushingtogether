@@ -32,7 +32,7 @@ module.exports = (router, base, passport) => {
   router.post(base + '/events/:id/accept', (req, res) => {
     Middleware.Auth(req)
     .then(() => {
-      Invite.accept(req,res);
+      Invite.call().accept(req,res);
     });
   });  
 

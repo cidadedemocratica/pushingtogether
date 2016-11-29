@@ -14,6 +14,17 @@ module.exports = {
     + "Sxar4aSg5sIXsSdAbhIjTZCsP2ZAh7SZCWa0uIL492jeEDpV5ZARFrgaBvYiQbenW",
     externalId: "1234567892"
   },
+  
+  validOtherUserAttributes: {
+    name: "User test #2",
+    email: "eduoumspyl_1480415365@tfbnw.net",
+    password: "2userpassword123",
+    facebookId: "113860755769041",
+    facebookToken: "EAAX5XzZBpSxkBAB2VQWI5Jvho7qGhKU1Hg2d79SATHZCtXKp66lfuo"
+    + "467eSqz5MxTsCclMJMoyH75exdYqPBuNQzekcrNbKjGWi9xmnyBhA4FyY71PeCampZCZ"
+    + "C8yNJt23SrUT9J0ENWLHJdDWhrEtoDS705HpcgFWMYZCEGAdkFa9DR4YZBBK",
+    externalId: "21234567892"
+  },
 
   validEventAttributes: {
     title: "Test Event",
