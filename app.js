@@ -19,17 +19,12 @@ var base = "/api/v1";
 
 require('./config/passport')(passport);
 
-
-var crons = require('./src/crons/pushabilities_crons.js');
-crons.pushabilityInspector.start();
-
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(bodyParser());
 app.use(session({ secret: 'ilovemadrid' }));
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 //use express Router and set our app routes
 app.use(expressRouter);

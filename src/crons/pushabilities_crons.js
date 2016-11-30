@@ -9,9 +9,25 @@
 // * * * * * *
 
 var cron = require('node-cron');
+var polis = require('../../config/polis-api');
 
 module.exports = {
-  pushabilityInspector: cron.schedule('*/5 * * * * *', () => {
-    console.log('running a task every minute');
-  }, false),
+  runPushabilityInspector: (conversation) => {
+    var pushabilityInspectorCron = cron.schedule('* * * * * *', () => {
+      polis.get('ptptois', {
+        params: {
+          conversation_id: conversation.externalUrl
+        }
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log("Error with POLIS API");
+        console.log(err);
+      });
+    }, false);
+    
+    pushabilityInspectorCron.start();
+  },
 }

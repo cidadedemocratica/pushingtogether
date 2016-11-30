@@ -21,6 +21,9 @@ else
   echo
   echo "For security reasons we can't deploy our POLIS_API_KEY";
   echo "Please, create script to export POLIS_API_KEY at config/polis-api/polis.env";
-  echo "Example: 'export POLIS_API_KEY= your-key-here'";
+  echo
+  echo "Example:"
+  echo "export POLIS_API_KEY= your-key-here"
+  echo "export POLIS_AUTH_HASH= your-basic-auth-hash"
   echo
 fi

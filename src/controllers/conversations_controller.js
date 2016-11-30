@@ -8,6 +8,8 @@
 var ApplicationController = require('./application_controller');
 var Conversation = ApplicationController.Conversation
 
+var Crons = require('../crons/pushabilities_crons');
+
 module.exports = () => {
 
   var create = (req, res) => {
@@ -16,6 +18,7 @@ module.exports = () => {
 
       currentUser.createConversation(req.body)
       .then((conversation) => {
+        Crons.runPushabilityInspector(conversation);
         res.status(200).send({conversation: conversation});
       })
       .catch((err) => {

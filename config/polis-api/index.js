@@ -8,12 +8,13 @@ settings = {
 
   method: 'get', // default
 
-  baseUrl: 'https://api.pol.is/api/v3',
+  baseURL: 'https://api.pol.is/api/v3',
   url: 'https://api.pol.is/api/v3',
 
   headers: {
     'X-Requested-With': 'XMLHttpRequest',
-    'user' : process.env.POLIS_API_KEY
+    'user' : process.env.POLIS_API_KEY,
+    'Authorization': process.env.POLIS_AUTH_HASH 
   },
 
   responseType: 'json', // default
