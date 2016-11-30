@@ -20,6 +20,9 @@ var base = "/api/v1";
 require('./config/passport')(passport);
 
 
+var crons = require('./src/crons/pushabilities_crons.js');
+crons.pushabilityInspector.start();
+
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(bodyParser());
