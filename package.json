@@ -14,7 +14,7 @@
     "db:migrate:undo": "./node_modules/.bin/sequelize db:migrate:undo",
     "setup": "./scripts/quickstart.sh",
     "setup:osx": "scripts/OSX_quickstart.sh",
-    "start": "./config/env/dev.env"
+    "start": "./scripts/start.sh"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/cidadedemocratica/pushingtogether#readme",
   "dependencies": {
+    "axios": "^0.15.3",
     "body-parser": "^1.15.2",
     "connect-roles": "^3.1.2",
     "cookie-parser": "^1.4.3",

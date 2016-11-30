@@ -5,3 +5,4 @@ npm-debug.log
 config/database.json
 coverage.*
 coverage/*
+config/polis-api/polis.env
