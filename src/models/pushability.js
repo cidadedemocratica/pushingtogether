@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       active: DataTypes.BOOLEAN,
       type: DataTypes.STRING,
+      externalTopicId: DataTypes.INTEGER
     },
     {
       classMethods:{
