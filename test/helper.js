@@ -56,6 +56,6 @@ module.exports = {
   },
 
   validConversationAttributes: {
-    externalUrl: "9yb3fyjsbu"
+    externalUrl: "78nfpz"
   }
 }
