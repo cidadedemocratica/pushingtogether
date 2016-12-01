@@ -107,6 +107,7 @@ module.exports = () => {
 
   var login = (req,res) => {
     var facebookToken = req.body.facebookToken;
+    var facebookReq = req.body;
     User.findOne({
       where: {
         facebookToken: facebookToken
@@ -117,7 +118,18 @@ module.exports = () => {
       }
       else{
         graph.get('me?access_token=' + facebookToken, (err, facebookRes) => {
-          res.send({facebookRes})
+          if (facebookReq.profile.id == facebookRes.id){
+            var newUser = User.build({
+              //facebookId: //facebookReq.profile.id,
+              //facebookToken: //facebookToken,
+              //name: //facebookReq.profile.name.givenName + ' ' + facebookReq.profile.name.familyName,
+              //email: //facebookReq.profile.emails[0].value,
+              //externalId: //facebookReq.profile.emails[0].value + facebookReq.profile.id
+            });
+            newUser.save().then((user) => {
+              res.send({user: user});
+            });
+          }
         });
       }
     });
