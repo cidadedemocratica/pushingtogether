@@ -12,6 +12,8 @@
     "db:drop:dev:osx": "psql -c \"drop database pt_dev\"",
     "db:migrate": "./node_modules/.bin/sequelize db:migrate",
     "db:migrate:undo": "./node_modules/.bin/sequelize db:migrate:undo",
+    "db:seed": "./node_modules/.bin/sequelize db:seed:all",
+    "migration:create": "./node_modules/.bin/sequelize migration:create",
     "setup": "./scripts/quickstart.sh",
     "setup:osx": "./scripts/OSX_quickstart.sh",
     "start": "./scripts/start.sh"
