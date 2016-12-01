@@ -13,6 +13,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var morgan = require('morgan');
+var crons = require('./src/crons/pushabilities_crons.js');
 
 var app = express();
 var base = "/api/v1";
@@ -25,6 +26,8 @@ app.use(bodyParser());
 app.use(session({ secret: 'ilovemadrid' }));
 app.use(passport.initialize());
 app.use(passport.session());
+
+crons.startCrons();
 
 //use express Router and set our app routes
 app.use(expressRouter);
