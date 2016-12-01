@@ -8,6 +8,8 @@
 // │ │ │ │ │ │
 // * * * * * *
 
+require('promise-spread');
+
 var cron = require('node-cron');
 var polis = require('../../config/polis-api');
 var Conversation = require('../models').Conversation;
@@ -37,14 +39,14 @@ var getConsensusTopicsIds = (consensus) => {
 }
 
 // fetch maiority opinion for each group
-var getMaiorityGroupOpinionData = (data, conversation, groupId) => {
+var getMaiorityGroupOpinionData = (data, conversation, potentActivists, groupId) => {
   var topicsIds = data["repness"][groupId].map((topic) => {
     return topic["tid"];
   });
 
   return fetchTopicData(conversation, topicsIds)
   .then((response) => {
-    console.log(response.data);
+    getActivists(response.data, potentActivists);
   })
   .catch((err) => {
     console.log("Error fetching topics data");
@@ -62,35 +64,71 @@ var fetchTopicData = (conversation, topicsIds) => {
   });
 }
 
-var getTopicMinority = (data, topic) => {
-  var clustersVotes = data["votes-base"][topic.id][topic.nonMembersOpinion];
-  var members = {}
-  // Pol.is clusterizes the people opinions, so if clusterSize > 0
-  // means that the people in the cluster agree/disagree with the topic
-  clustersVotes.forEach((clusterSize, index) => {
-    if (clusterSize != "0"){
-      getClusterMembers(data, index).forEach((member) => {
-        members[member["id"]] = member["group"];
-      });
-    }
-  });
+var verifyClusters = (data, topic) => {
+  return new Promise((resolve, reject)  => {
+    var clustersVotes = data["votes-base"][topic.id][topic.nonMembersOpinion];
+    // Pol.is clusterizes the people opinions, so if clusterSize > 0
+    // means that the people in the cluster agree/disagree with the topic
+    var membersInfoPromises = []
+    clustersVotes.forEach((clusterSize, index) => {
+      if (clusterSize != "0"){
+        //if(topic.id == "7") console.log("quando igual a zero" + index);
+        membersInfoPromises.push(getClusterMembers(data, index));
+      }
+    });
 
-  return members;
+    resolve(membersInfoPromises);
+  });
+}
+
+var getTopicMinority = (data, topic) => {
+
+  return verifyClusters(data, topic)
+  .then((clustersMembersInfoPromises) => {
+    return Promise.all(clustersMembersInfoPromises)
+    .spread((...clustersMembersInfo) => {
+      var allMembersInfo = {}
+      clustersMembersInfo.forEach((clusterMembersInfo) => {
+        clusterMembersInfo.forEach((memberInfo) => {
+          allMembersInfo[memberInfo[0]] = memberInfo[1];
+        });
+      });
+      return {topicId: topic.id, potentialActivists: allMembersInfo};
+    });
+  });
 }
 
 var getClusterMembers = (data, clusterIndex) => {
-  var membersIds = data["base-clusters"]["members"][clusterIndex]
-  var membersInfo = membersIds.map((memberId) => {
-    return { id: memberId, group: getMemberGroup(data, memberId) };
+  var membersIds = data["base-clusters"]["members"][clusterIndex];
+
+  var findMembersGroupsPromises = membersIds.map((memberId) => {
+    return getMemberGroup(data, memberId)
   });
 
-  return membersInfo;
+  return Promise.all(findMembersGroupsPromises)
+  .spread((...membersAndGroups) => {
+    var clusterMembersInfo = membersAndGroups;
+    return clusterMembersInfo;
+  })
 }
 
 var getMemberGroup = (data, memberId) => {
-  data["group-clusters"].forEach((group) => {
-    if(group["members"].includes(memberId)){
-      return group["id"];
+  return new Promise((resolve, reject)  => {
+    data["group-clusters"].forEach((group) => {
+      if(group["members"].includes(memberId)){
+        resolve([memberId, group.id]);
+      }
+    });
+    // refactor with try catch
+    resolve([memberId, -1]);
+  });
+}
+
+var getActivists = (topicsInfo, potentActivists) => {
+  topicsInfo.forEach((topic) => {
+    if(topic.social){
+      //calculate activists here
+      console.log("Topic: " + topic["tid"] + " Author: " + topic.social["name"]);
     }
   });
 }
@@ -106,11 +144,32 @@ module.exports = {
       })
       .then((res) => {
         var consensusTopicsIds = getConsensusTopicsIds(res.data.consensus);
-        consensusTopicsIds.forEach((topic) => {
-          var minority = getTopicMinority(res.data, topic);
-          
+        //console.log(consensusTopicsIds);
+
+        var potentActivistsPerTopicsPromise = consensusTopicsIds.map((topic) => {
+          //console.log(topic);
+          return getTopicMinority(res.data, topic);
+        });
+
+        Promise.all(potentActivistsPerTopicsPromise)
+        .spread((...potentActivistsPerTopic) => {
+          var allPotentActivistsPerTopic = []
+          potentActivistsPerTopic.forEach((potentActivists) => {
+            if(Object.keys(potentActivists.potentialActivists) != 0){ 
+              allPotentActivistsPerTopic.push(potentActivists);
+            }
+          });
+
+          return allPotentActivistsPerTopic;
+        })
+        .then((allPotentActivistsPerTopic) => {
           res.data['group-clusters'].forEach((group) => {
-            getMaiorityGroupOpinionData(res.data, conversation, group['id']);
+            getMaiorityGroupOpinionData(
+              res.data,
+              conversation,
+              allPotentActivistsPerTopic,
+              group['id']
+            );
           });
         });
       })
@@ -124,7 +183,7 @@ module.exports = {
   },
 
   runVotesCounter: (conversation) => {
-    var votesCounter = cron.schedule('*/5 * * * * *', () => {
+    var votesCounter = cron.schedule('* * * * * *', () => {
       polis.get('conversations', {
         params: {
           conversation_id: conversation.externalUrl
@@ -133,7 +192,7 @@ module.exports = {
       .then((res) => {
         var votesCount = res.data.participant_count;
         console.log(votesCount);
-        if(votesCount >= 40){
+        if(votesCount >= 41){
           module.exports.runPushabilityInspector(conversation);
           votesCounter.stop();
         }

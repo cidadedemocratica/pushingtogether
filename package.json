@@ -45,6 +45,7 @@
     "pg-hstore": "^2.3.2",
     "pg-native": "^1.10.0",
     "pluralize": "^3.0.0",
+    "promise-spread": "^0.1.0",
     "sequelize": "^3.27.0",
     "sequelize-cli": "^2.4.0",
     "validator": "^6.1.0"
