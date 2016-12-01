@@ -17,7 +17,7 @@ var Conversation = require('../models').Conversation;
 var getConsensusTopicsIds = (consensus) => {
   var topicsIds = [];
 
-  consus.agree.forEach((topic) => {
+  consensus.agree.forEach((topic) => {
     topicsIds.push({
       id: topic.tid,
       membersOpinion: "A",
@@ -25,7 +25,7 @@ var getConsensusTopicsIds = (consensus) => {
     });
   });
 
-  consus.disagree.forEach((topic) => {
+  consensus.disagree.forEach((topic) => {
     topicsIds.push({
       id: topic.tid,
       membersOpinion: "D", // D = disagree, Pol.is sucks
@@ -37,33 +37,28 @@ var getConsensusTopicsIds = (consensus) => {
 }
 
 // fetch maiority opinion for each group
-var getMaiorityGroupOpinionData = (data, groupId) => {
+var getMaiorityGroupOpinionData = (data, conversation, groupId) => {
   var topicsIds = data["repness"][groupId].map((topic) => {
     return topic["tid"];
   });
 
-  //fetchTopicData(topicsIds);
-}
-
-var fetchTopicData = (topicsIds) => {
-  polis.get('comments', {
-    params: {
-      conversation_id: conversation.externalUrl,
-      tids: topicsIds,
-      include_social: true
-    }
-  })
-  .then((res) => {
-    var votesCount = res.data.participant_count;
-    console.log(votesCount);
-    if(votesCount >= 36){
-      module.exports.runPushabilityInspector(conversation);
-      votesCounter.stop();
-    }
+  return fetchTopicData(conversation, topicsIds)
+  .then((response) => {
+    console.log(response.data);
   })
   .catch((err) => {
-    console.log("Error with Votes Counter Cron");
+    console.log("Error fetching topics data");
     console.log(err);
+  });
+}
+
+var fetchTopicData = (conversation, topicsIds) => {
+  return polis.get('comments', {
+    params: {
+      conversation_id: conversation.externalUrl,
+      tids: topicsIds.join(','),
+      include_social: true
+    }
   });
 }
 
@@ -103,7 +98,7 @@ var getMemberGroup = (data, memberId) => {
 // Crons
 module.exports = {
   runPushabilityInspector: (conversation) => {
-    var pushabilityInspectorCron = cron.schedule('* * * * * *', () => {
+    var pushabilityInspectorCron = cron.schedule('*/5 * * * * *', () => {
       polis.get('math/pca2', {
         params: {
           conversation_id: conversation.externalUrl
@@ -111,8 +106,13 @@ module.exports = {
       })
       .then((res) => {
         var consensusTopicsIds = getConsensusTopicsIds(res.data.consensus);
-        
-        
+        consensusTopicsIds.forEach((topic) => {
+          var minority = getTopicMinority(res.data, topic);
+          
+          res.data['group-clusters'].forEach((group) => {
+            getMaiorityGroupOpinionData(res.data, conversation, group['id']);
+          });
+        });
       })
       .catch((err) => {
         console.log("Error with POLIS API");
@@ -124,7 +124,7 @@ module.exports = {
   },
 
   runVotesCounter: (conversation) => {
-    var votesCounter = cron.schedule('* * * * * *', () => {
+    var votesCounter = cron.schedule('*/5 * * * * *', () => {
       polis.get('conversations', {
         params: {
           conversation_id: conversation.externalUrl
@@ -133,7 +133,7 @@ module.exports = {
       .then((res) => {
         var votesCount = res.data.participant_count;
         console.log(votesCount);
-        if(votesCount >= 36){
+        if(votesCount >= 40){
           module.exports.runPushabilityInspector(conversation);
           votesCounter.stop();
         }
