@@ -1,9 +1,5 @@
 var axios = require('axios');
 
-console.log('-------------------------------------------------------------------------------------------------------');
-console.log(process.env.POLIS_API_KEY);
-console.log(process.env.PT_PORT);
-
 settings = {
 
   method: 'get', // default
@@ -29,7 +25,7 @@ settings = {
   onDownloadProgress: (progressEvent) => {
   },
 
-  maxContentLength: 2000,
+  maxContentLength: 52000,
 
   validateStatus: (status) => {
     return status >= 200 && status < 500; // default
