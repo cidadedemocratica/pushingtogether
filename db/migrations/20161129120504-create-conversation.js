@@ -28,6 +28,15 @@ module.exports = {
             key: "id"
           }
         },
+
+        title: {
+          type: Sequelize.STRING
+        },
+
+        votesCount: {
+          type: Sequelize.INTEGER
+        },
+
       },
       {
         engine: 'MYISAM', // default: 'InnoDB'

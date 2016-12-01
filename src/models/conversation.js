@@ -3,6 +3,8 @@
 module.exports = (sequelize, DataTypes) => {
   var Conversation = sequelize.define("Conversation", {
       externalUrl: DataTypes.STRING,
+      votesCount: DataTypes.INTEGER,
+      title: DataTypes.STRING,
     },
     {
       classMethods:{
