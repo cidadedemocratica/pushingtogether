@@ -37,6 +37,10 @@ module.exports = (router, base, passport) => {
     });
   });
 
+  router.post(base + '/login', (req, res) => {
+      User.call().login(req,res);
+  });
+
 };
 
 function resourcesFor(router, base, name, resource){

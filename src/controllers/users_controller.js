@@ -7,6 +7,7 @@
 
 var ApplicationController = require('./application_controller');
 var User = ApplicationController.User
+var graph = require('fbgraph');
 
 module.exports = () => {
 
@@ -31,7 +32,7 @@ module.exports = () => {
       User.findById(req.params.id)
       .then((user) => {
         if(user) {
-            res.status(200).send(user);
+          res.status(200).send(user);
         }else {
           res.status(404).send('User not found');
         }
@@ -104,6 +105,25 @@ module.exports = () => {
     });
   }
 
+  var login = (req,res) => {
+    var facebookToken = req.body.facebookToken;
+    User.findOne({
+      where: {
+        facebookToken: facebookToken
+      }
+    }).then((user) => {
+      if(user) {
+        res.send({user: user});
+      }
+      else{
+        graph.get('me?access_token=' + facebookToken, (err, facebookRes) => {
+          res.send({facebookRes})
+        });
+      }
+    });
+  };
+
+
   return {
     create: (req, res) => {
       return create(req, res);
@@ -122,6 +142,9 @@ module.exports = () => {
     },
     skipAuthFor: () => {
       return skipAuthFor();
+    },
+    login: (req, res) => {
+      return login(req, res);
     },
   }
 }
