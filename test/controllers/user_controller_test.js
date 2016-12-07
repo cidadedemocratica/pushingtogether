@@ -5,6 +5,7 @@ var chai = require('chai');
 var chaiHttp = require('chai-http');
 process.env.PT_PORT = 5486;
 var server = require('../../app');
+const status = require('./../../src/utils/http_status_codes');
 
 chai.use(chaiHttp);
 
@@ -35,7 +36,7 @@ describe('UsersControllerTest', function() {
           .end(function (err, res) {
             models.User.count()
             .then(function(count) {
-              expect(res.status).toBe(200);
+              expect(res.status).toBe(status.OK);
               expect(count).toBe(usersCount-1);
               done();
             });
@@ -50,7 +51,7 @@ describe('UsersControllerTest', function() {
           .delete("/api/v1/users/" + otherUser.id)
           .set('facebookToken', _user.facebookToken)
           .end(function (err, res) {
-            expect(res.status).toBe(404);
+            expect(res.status).toBe(status.NOT_FOUND);
             done();
           });
         });

@@ -5,6 +5,7 @@
 
 'use strict';
 
+const status = require('./../utils/http_status_codes');
 var ApplicationController = require('./application_controller');
 var Pushability = ApplicationController.Pushability
 
@@ -16,9 +17,9 @@ module.exports = () => {
       .then((Pushability) => {
         if(Pushability){
           // TODO: insert users to the Pushability
-          res.status(200).send({Pushability: Pushability});
+          res.status(status.OK).send({Pushability: Pushability});
         }else {
-          res.status(400).send('Pushability cannot be created');
+          res.status(status.BAD_REQUEST).send('Pushability cannot be created');
         }
       });
     });
@@ -29,9 +30,9 @@ module.exports = () => {
       Pushability.findById(req.params.id)
       .then((Pushability) => {
         if(Pushability){
-          res.status(200).send({Pushability: Pushability});
+          res.status(status.OK).send({Pushability: Pushability});
         }else {
-          res.status(400).send('Pushability does not exist');
+          res.status(status.BAD_REQUEST).send('Pushability does not exist');
         }
       });
     });
@@ -44,10 +45,10 @@ module.exports = () => {
         if(Pushability){
           Pushability.update(req.body)
           .then((Pushability) => {
-            res.status(200).send({Pushability: Pushability});
+            res.status(status.OK).send({Pushability: Pushability});
           })
         }else {
-          res.status(400).send('Pushability does not exist');
+          res.status(status.BAD_REQUEST).send('Pushability does not exist');
         }
       });
     });
@@ -58,10 +59,10 @@ module.exports = () => {
       Pushability.destroy({ where: { id: req.params.id } })
       .then((rows) => {
         if(rows) {
-          res.status(200).send('Pushability deleted with success');
+          res.status(status.OK).send('Pushability deleted with success');
         }
         else {
-          res.status(400).send('Pushability does not exist');
+          res.status(status.BAD_REQUEST).send('Pushability does not exist');
         }
       });
     });
@@ -71,10 +72,10 @@ module.exports = () => {
     setImmediate(() => {
       Pushability.all()
       .then((Pushabilitys) => {
-        res.status(200).send({Pushabilitys: Pushabilitys});
+        res.status(status.OK).send({Pushabilitys: Pushabilitys});
       })
       .error((err) => {
-        res.status(500).send('Internal server error');
+        res.status(status.INTERNAL_SERVER_ERROR).send('Internal server error');
       });
     });
 

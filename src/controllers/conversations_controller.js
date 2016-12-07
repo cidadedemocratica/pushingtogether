@@ -5,6 +5,7 @@
 
 'use strict';
 
+const status = require('./../utils/http_status_codes');
 var ApplicationController = require('./application_controller');
 var Conversation = ApplicationController.Conversation
 
@@ -19,11 +20,11 @@ module.exports = () => {
       currentUser.createConversation(req.body)
       .then((conversation) => {
         Crons.runPushabilityInspector(conversation);
-        res.status(200).send({conversation: conversation});
+        res.status(status.OK).send({conversation: conversation});
       })
       .catch((err) => {
         console.error(err);
-        res.status(400).send('Conversation cannot be created');
+        res.status(status.BAD_REQUEST).send('Conversation cannot be created');
       });
     });
   }
@@ -33,9 +34,9 @@ module.exports = () => {
       Conversation.findById(req.params.id)
       .then((conversation) => {
         if(conversation){
-          res.status(200).send({conversation: conversation});
+          res.status(status.OK).send({conversation: conversation});
         }else {
-          res.status(400).send('Conversation does not exist');
+          res.status(status.BAD_REQUEST).send('Conversation does not exist');
         }
       });
     });
@@ -48,10 +49,10 @@ module.exports = () => {
         if(conversation){
           conversation.update(req.body)
           .then((conversation) => {
-            res.status(200).send({conversation: conversation});
+            res.status(status.OK).send({conversation: conversation});
           })
         }else {
-          res.status(400).send('Conversation does not exist');
+          res.status(status.BAD_REQUEST).send('Conversation does not exist');
         }
       });
     });
@@ -62,10 +63,10 @@ module.exports = () => {
       Conversation.destroy({ where: { id: req.params.id } })
       .then((rows) => {
         if(rows) {
-          res.status(200).send('Conversation deleted with success');
+          res.status(status.OK).send('Conversation deleted with success');
         }
         else {
-          res.status(400).send('Conversation does not exist');
+          res.status(status.BAD_REQUEST).send('Conversation does not exist');
         }
       });
     });
@@ -75,10 +76,10 @@ module.exports = () => {
     setImmediate(() => {
       Conversation.all()
       .then((conversations) => {
-        res.status(200).send({conversations: conversations});
+        res.status(status.OK).send({conversations: conversations});
       })
       .error((err) => {
-        res.status(500).send('Internal server error');
+        res.status(status.INTERNAL_SERVER_ERROR).send('Internal server error');
       });
     });
 

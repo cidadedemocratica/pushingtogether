@@ -7,6 +7,7 @@ var chai = require('chai');
 var chaiHttp = require('chai-http');
 process.env.PT_PORT = 5486;
 var server = require('../../app');
+const status = require('./../../src/utils/http_status_codes');
 
 chai.use(chaiHttp);
 
@@ -52,7 +53,7 @@ describe('EventControllerTest', function() {
         .set('facebookToken', _user.facebookToken)
         .send(helper.validEventAttributes) // without conversation id
         .end((err, res) => {
-          expect(res.status).toBe(400);
+          expect(res.status).toBe(status.BAD_REQUEST);
           done();
         });
       });
@@ -69,7 +70,7 @@ describe('EventControllerTest', function() {
           conversationId: _conversation.id
         })
         .end((err, res) => {
-          expect(res.status).toBe(200);
+          expect(res.status).toBe(status.OK);
           done();
         });
       });

@@ -5,6 +5,7 @@
 
 'use strict';
 
+const status = require('./../utils/http_status_codes');
 var ApplicationController = require('./application_controller');
 var Event = ApplicationController.Event
 var Invite = ApplicationController.Invite
@@ -23,16 +24,16 @@ module.exports = () => {
         }
       })
       .then((invite) => {
-        return invite.updateAttributes({status: Invite.status.CONFIRMED}) 
+        return invite.updateAttributes({status: Invite.status.CONFIRMED})
         .then(() => {
           return Event.findById(eventId)
           .then((event) => {
-            res.status(200).send({event: event});
+            res.status(status.OK).send({event: event});
           });
         });
       })
       .catch((err) => {
-        res.status(400).send('Event cannot be updated');
+        res.status(status.BAD_REQUEST).send('Event cannot be updated');
       });
     });
   }
