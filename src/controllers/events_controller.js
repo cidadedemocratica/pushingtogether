@@ -5,6 +5,7 @@
 
 'use strict';
 
+const status = require('./../utils/http_status_codes');
 var ApplicationController = require('./application_controller');
 var Event = ApplicationController.Event
 var Pushability = ApplicationController.Pushability
@@ -30,13 +31,13 @@ module.exports = () => {
           .then((users) => {
             return event.addUsers(users)
             .then(() => {
-              res.status(200).send({event: event});
+              res.status(status.OK).send({event: event});
             });
           });
         });
       })
       .catch((err) => {
-        res.status(400).send('Event cannot be created');
+        res.status(status.BAD_REQUEST).send('Event cannot be created');
       });
     });
   }
@@ -46,9 +47,9 @@ module.exports = () => {
       Event.findById(req.params.id)
       .then((event) => {
         if(event){
-          res.status(200).send({event: event});
+          res.status(status.OK).send({event: event});
         }else {
-          res.status(400).send('Event does not exist');
+          res.status(status.BAD_REQUEST).send('Event does not exist');
         }
       });
     });
@@ -61,10 +62,10 @@ module.exports = () => {
         if(event){
           event.update(req.body)
           .then((event) => {
-            res.status(200).send({event: event});
+            res.status(status.OK).send({event: event});
           })
         }else {
-          res.status(400).send('Event does not exist');
+          res.status(status.BAD_REQUEST).send('Event does not exist');
         }
       });
     });
@@ -75,10 +76,10 @@ module.exports = () => {
       Event.destroy({ where: { id: req.params.id } })
       .then((rows) => {
         if(rows) {
-          res.status(200).send('Event deleted with success');
+          res.status(status.OK).send('Event deleted with success');
         }
         else {
-          res.status(400).send('Event does not exist');
+          res.status(status.BAD_REQUEST).send('Event does not exist');
         }
       });
     });
@@ -88,10 +89,10 @@ module.exports = () => {
     setImmediate(() => {
       Event.all()
       .then((events) => {
-        res.status(200).send({events: events});
+        res.status(status.OK).send({events: events});
       })
       .error((err) => {
-        res.status(500).send('Internal server error');
+        res.status(status.INTERNAL_SERVER_ERROR).send('Internal server error');
       });
     });
 

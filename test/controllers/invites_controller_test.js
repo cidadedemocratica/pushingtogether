@@ -7,6 +7,7 @@ var chai = require('chai');
 var chaiHttp = require('chai-http');
 process.env.PT_PORT = 5486;
 var server = require('../../app');
+const status = require('./../../src/utils/http_status_codes');
 
 chai.use(chaiHttp);
 
@@ -44,7 +45,7 @@ describe('EventControllerTest', function() {
         .post("/api/v1/events/" + _event.id + "/accept")
         .set('facebookToken', _user.facebookToken)
         .end((err, res) => {
-          expect(res.status).toBe(200);
+          expect(res.status).toBe(status.OK);
           done();
         });
       });

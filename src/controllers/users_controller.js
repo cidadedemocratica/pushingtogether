@@ -5,6 +5,7 @@
 
 'use strict';
 
+const status = require('./../utils/http_status_codes');
 var ApplicationController = require('./application_controller');
 var User = ApplicationController.User
 
@@ -21,7 +22,7 @@ module.exports = () => {
         var jsonObj = JSON.parse(jsonStr);
         res.send(jsonObj);
       } catch (e) {
-        res.status(400).send('Invalid JSON string');
+        res.status(status.BAD_REQUEST).send('Invalid JSON string');
       }
     });
   }
@@ -31,14 +32,14 @@ module.exports = () => {
       User.findById(req.params.id)
       .then((user) => {
         if(user) {
-            res.status(200).send(user);
+            res.status(status.OK).send(user);
         }else {
-          res.status(404).send('User not found');
+          res.status(status.NOT_FOUND).send('User not found');
         }
       })
 
       .error((err) => {
-        res.status(500).send('Internal server error');
+        res.status(status.INTERNAL_SERVER_ERROR).send('Internal server error');
       });
     });
   }
@@ -50,19 +51,19 @@ module.exports = () => {
         if(req.currentUser && user && req.currentUser.canUpdate(user)) {
           user.updateAttributes(req.body)
           .then((u) => {
-            res.status(200).send(user);
+            res.status(status.OK).send(user);
           })
 
           .error(() => {
-            res.status(400).send('Error updating the user');
+            res.status(status.BAD_REQUEST).send('Error updating the user');
           });
         }else {
-          res.status(404).send('User not found or unauthorized');
+          res.status(status.NOT_FOUND).send('User not found or unauthorized');
         }
       })
 
       .error((err) => {
-        res.status(500).send('Internal server error');
+        res.status(status.INTERNAL_SERVER_ERROR).send('Internal server error');
       });
     });
   }
@@ -74,19 +75,19 @@ module.exports = () => {
         if(req.currentUser && user && user.canDestroy(req.currentUser, user)) {
           user.destroy()
           .then((u) => {
-            res.status(200).send(user);
+            res.status(status.OK).send(user);
           })
 
           .error(() => {
-            res.status(400).send('Error destroying the user');
+            res.status(status.BAD_REQUEST).send('Error destroying the user');
           });
         }else {
-          res.status(404).send('User not found or unauthorized');
+          res.status(status.NOT_FOUND).send('User not found or unauthorized');
         }
       })
 
       .error((err) => {
-        res.status(500).send('Internal server error');
+        res.status(status.INTERNAL_SERVER_ERROR).send('Internal server error');
       });
     });
   }
@@ -95,11 +96,11 @@ module.exports = () => {
     setImmediate(() => {
       User.all()
       .then((users) => {
-        res.status(200).send({users: users});
+        res.status(status.OK).send({users: users});
       })
 
       .error((err) => {
-        res.status(500).send('Internal server error');
+        res.status(status.INTERNAL_SERVER_ERROR).send('Internal server error');
       });
     });
   }
