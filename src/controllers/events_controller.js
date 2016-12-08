@@ -5,9 +5,9 @@
 
 'use strict';
 
-var ApplicationController = require('./application_controller');
-var Event = ApplicationController.Event
-var Pushability = ApplicationController.Pushability
+var models = require('../models/index.js');
+var Event = models.Event;
+var Pushability = models.Pushability;
 
 module.exports = () => {
 

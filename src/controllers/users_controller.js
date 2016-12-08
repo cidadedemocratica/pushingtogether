@@ -5,8 +5,8 @@
 
 'use strict';
 
-var ApplicationController = require('./application_controller');
-var User = ApplicationController.User
+var models = require('../models/index.js');
+var User = models.User;
 
 module.exports = () => {
 

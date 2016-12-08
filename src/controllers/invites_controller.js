@@ -5,9 +5,9 @@
 
 'use strict';
 
-var ApplicationController = require('./application_controller');
-var Event = ApplicationController.Event
-var Invite = ApplicationController.Invite
+var models = require('../models/index.js');
+var Invite = models.Invite;
+var Event = models.Event;
 
 module.exports = () => {
 

@@ -5,8 +5,8 @@
 
 'use strict';
 
-var ApplicationController = require('./application_controller');
-var Pushability = ApplicationController.Pushability
+var models = require('../models/index.js');
+var Pushability = models.Pushability;
 
 module.exports = () => {
 
