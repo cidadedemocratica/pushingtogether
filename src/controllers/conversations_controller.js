@@ -5,9 +5,8 @@
 
 'use strict';
 
-var ApplicationController = require('./application_controller');
-var Conversation = ApplicationController.Conversation
-
+var models = require('../models/index.js');
+var Conversation = models.Conversation;
 var Crons = require('../crons/pushabilities_crons');
 
 module.exports = () => {
