@@ -39,28 +39,58 @@ var getConsensusTopicsIds = (consensus) => {
 }
 
 // fetch maiority opinion for each group
-var getMaiorityGroupOpinionData = (data, conversation, potentActivists, groupId) => {
-  var topicsIds = data["repness"][groupId].map((topic) => {
-    return topic["tid"];
+var getGroupMajorityOpinionTopics = (data, groupId) => {
+  return new Promise((resolve, reject) => {
+    var topicsIds = data["repness"][groupId].map((topic) => {
+      return topic["tid"];
+    });
+
+    resolve({
+      groupId: groupId,
+      topicsIds: topicsIds
+    });
+  })
+}
+
+var verifyActivists = (data, conversation, potentActivists) => {
+
+  // Create a promise with the majority opnion topics for each group
+  var majorityOpinionTopicsPromise = data['group-clusters'].map((group) => {
+    return getGroupMajorityOpinionTopics(data, group.id);
   });
 
-  return fetchTopicData(conversation, topicsIds)
-  .then((response) => {
-    getActivists(response.data, potentActivists);
-  })
-  .catch((err) => {
-    console.log("Error fetching topics data");
-    console.log(err);
+  Promise.all(majorityOpinionTopicsPromise)
+  .spread((...majorityOpinionTopics) => {
+    var relevantTopicsInfoPerGroupPromises = majorityOpinionTopics
+      .map((groupMajorityOpinionTopics) => {
+        return fetchTopicData(conversation, groupMajorityOpinionTopics);
+      });
+
+    Promise.all(relevantTopicsInfoPerGroupPromises)
+    .spread((...topicsInfoPerGroup) => {
+      topicsInfoPerGroup.forEach((topicGroups) => {
+        // TODO: the following lines should be deleted and
+        // is needed a logic to fetch user internal ID or external ID
+        // from the topic information
+        console.log("GROUP " + topicGroups.groupId);
+        console.log(topicGroups.data);
+        console.log("==========================================================================");
+      });
+    });
   });
 }
 
-var fetchTopicData = (conversation, topicsIds) => {
+var fetchTopicData = (conversation, groupTopicsInfo) => {
   return polis.get('comments', {
     params: {
       conversation_id: conversation.externalUrl,
-      tids: topicsIds.join(','),
+      tids: groupTopicsInfo.topicsIds.join(','),
       include_social: true
     }
+  })
+  .then((response) => {
+    response.groupId = groupTopicsInfo.groupId;
+    return response;
   });
 }
 
@@ -163,15 +193,10 @@ module.exports = {
           return allPotentActivistsPerTopic;
         })
         .then((allPotentActivistsPerTopic) => {
-          res.data['group-clusters'].forEach((group) => {
-            getMaiorityGroupOpinionData(
-              res.data,
-              conversation,
-              allPotentActivistsPerTopic,
-              group['id']
-            );
-          });
+          console.log("passou");
+          verifyActivists(res.data, conversation, allPotentActivistsPerTopic);
         });
+
       })
       .catch((err) => {
         console.log("Error with POLIS API");
